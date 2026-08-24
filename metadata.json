@@ -1,0 +1,6 @@
+{
+  "name": "Desafío Bíblico de 30 Días",
+  "description": "Plan devocional y de lectura bíblica de 30 días con seguimiento de progreso compartido y reflexiones.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
