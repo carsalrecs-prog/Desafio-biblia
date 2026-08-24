@@ -10,9 +10,10 @@ import {
   BookOpen,
   Calendar,
   CheckCircle2,
-  Edit3,
   Loader2,
-  FileText,
+  Layers,
+  FileCheck,
+  Flame,
 } from 'lucide-react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -47,7 +48,7 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
   const [customDedication, setCustomDedication] = useState(
     'Por haber caminado juntos durante 30 días en la presencia de Dios, fortaleciendo su fe, su amor y su devoción mutua a través de Su Santa Palabra.'
   );
-  const [activeTab, setActiveTab] = useState<'certificate' | 'reflections' | 'checklist'>('certificate');
+  const [activeTab, setActiveTab] = useState<'all' | 'certificate' | 'checklist' | 'reflections'>('all');
 
   const printRef = useRef<HTMLDivElement>(null);
 
@@ -67,7 +68,6 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
 
   const totalReadings = totalFlor + totalTereque;
   const progressPercent = Math.round((totalReadings / 60) * 100);
-  const isFullyCompleted = progressPercent === 100;
 
   // Download PDF handler using html2canvas & jsPDF
   const handleDownloadPDF = async () => {
@@ -77,18 +77,16 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
     try {
       const element = printRef.current;
       
-      // Temporary style adjustments for optimal canvas capture
       const canvas = await html2canvas(element, {
-        scale: 2, // High resolution
+        scale: 2,
         useCORS: true,
         backgroundColor: '#ffffff',
         logging: false,
-        windowWidth: 1200,
+        windowWidth: 1000,
       });
 
       const imgData = canvas.toDataURL('image/png');
       
-      // Calculate A4 dimensions (210mm x 297mm in pt)
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
@@ -116,12 +114,21 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
         heightLeft -= pdfHeight;
       }
 
-      const fileName = `Desafio_Biblico_${partnerNames.flor}_y_${partnerNames.tereque}.pdf`
+      const modeName =
+        activeTab === 'certificate'
+          ? 'Certificado'
+          : activeTab === 'checklist'
+          ? 'Lecturas'
+          : activeTab === 'reflections'
+          ? 'Reflexiones'
+          : 'Album_Completo';
+
+      const fileName = `Desafio_Biblico_${modeName}_${partnerNames.flor}_y_${partnerNames.tereque}.pdf`
         .replace(/\s+/g, '_');
       pdf.save(fileName);
     } catch (error) {
       console.error('Error generating PDF:', error);
-      alert('Hubo un inconveniente al generar el PDF. También podés usar el botón "Imprimir" para guardarlo como PDF.');
+      alert('Hubo un inconveniente al generar el PDF. Podés usar el botón "Imprimir" y elegir "Guardar como PDF".');
     } finally {
       setIsGenerating(false);
     }
@@ -131,57 +138,61 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
     window.print();
   };
 
+  const showCertificate = activeTab === 'all' || activeTab === 'certificate';
+  const showChecklist = activeTab === 'all' || activeTab === 'checklist';
+  const showReflections = activeTab === 'all' || activeTab === 'reflections';
+
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 overflow-y-auto no-print">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 overflow-y-auto printable-modal-overlay">
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs"
+          className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs no-print"
         />
 
-        {/* Modal Container */}
+        {/* Modal Card */}
         <motion.div
           initial={{ scale: 0.95, opacity: 0, y: 15 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.95, opacity: 0, y: 15 }}
-          className="relative z-10 w-full max-w-5xl bg-white rounded-3xl shadow-2xl border border-slate-200 flex flex-col max-h-[92vh] overflow-hidden"
+          className="relative z-10 w-full max-w-5xl bg-white rounded-3xl shadow-2xl border border-slate-200 flex flex-col max-h-[92vh] overflow-hidden printable-modal-card"
         >
-          {/* Header */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-5 border-b border-slate-100 bg-[#FFFDFB] gap-3">
+          {/* Header (No print) */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-5 border-b border-slate-100 bg-[#FFFDFB] gap-3 no-print">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center shadow-xs">
                 <Award className="w-5 h-5" />
               </div>
               <div>
                 <h2 className="text-lg sm:text-xl font-bold text-slate-800 flex items-center gap-2">
-                  <span>Libro & Certificado de Recuerdos</span>
+                  <span>Certificado & Libro de Recuerdos</span>
                   <Sparkles className="w-4 h-4 text-amber-500" />
                 </h2>
                 <p className="text-xs text-slate-500">
-                  Descargá e imprimí su certificado de 30 días y todas las reflexiones escritas
+                  Imprimí o descargá en PDF el certificado oficial y sus reflexiones
                 </p>
               </div>
             </div>
 
-            {/* Actions: Download PDF / Print / Close */}
+            {/* Actions: Print / Download PDF / Close */}
             <div className="flex items-center gap-2 self-end sm:self-center">
               <button
                 onClick={handlePrint}
-                className="px-3.5 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition-all"
-                title="Imprimir documento"
+                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs sm:text-sm font-semibold flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
+                title="Imprimir o guardar como PDF"
               >
-                <Printer className="w-4 h-4 text-slate-600" />
-                <span className="hidden sm:inline">Imprimir</span>
+                <Printer className="w-4 h-4 text-amber-300" />
+                <span>Imprimir</span>
               </button>
 
               <button
                 onClick={handleDownloadPDF}
                 disabled={isGenerating}
-                className="px-4 py-2 rounded-xl bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white text-xs sm:text-sm font-semibold flex items-center gap-1.5 shadow-sm shadow-rose-200 transition-all disabled:opacity-50"
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white text-xs sm:text-sm font-semibold flex items-center gap-1.5 shadow-sm shadow-rose-200 transition-all disabled:opacity-50 cursor-pointer"
               >
                 {isGenerating ? (
                   <>
@@ -206,17 +217,17 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
             </div>
           </div>
 
-          {/* Configuration toolbar */}
-          <div className="px-5 py-3 bg-slate-50 border-b border-slate-200/60 flex flex-wrap items-center justify-between gap-3 text-xs">
+          {/* Configuration toolbar (No print) */}
+          <div className="px-5 py-3 bg-slate-50 border-b border-slate-200/70 flex flex-wrap items-center justify-between gap-3 text-xs no-print">
             <div className="flex items-center gap-2 sm:gap-4 flex-wrap">
               <div className="flex items-center gap-1.5">
                 <Calendar className="w-3.5 h-3.5 text-slate-500" />
-                <span className="font-semibold text-slate-600">Fecha:</span>
+                <span className="font-semibold text-slate-600">Fecha de entrega:</span>
                 <input
                   type="text"
                   value={completionDate}
                   onChange={(e) => setCompletionDate(e.target.value)}
-                  className="px-2 py-1 bg-white border border-slate-200 rounded-lg text-slate-800 text-xs font-medium focus:outline-none focus:ring-1 focus:ring-rose-400"
+                  className="px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-slate-800 text-xs font-medium focus:outline-none focus:ring-1 focus:ring-rose-400"
                   placeholder="Fecha de culminación"
                 />
               </div>
@@ -227,7 +238,18 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
               </div>
             </div>
 
+            {/* View / Print scope tabs */}
             <div className="flex items-center gap-1 bg-white p-1 rounded-xl border border-slate-200">
+              <button
+                onClick={() => setActiveTab('all')}
+                className={`px-3 py-1 rounded-lg font-medium transition-all ${
+                  activeTab === 'all'
+                    ? 'bg-rose-500 text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                Todo el Álbum (3 pág)
+              </button>
               <button
                 onClick={() => setActiveTab('certificate')}
                 className={`px-3 py-1 rounded-lg font-medium transition-all ${
@@ -236,7 +258,7 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                Certificado
+                Solo Certificado
               </button>
               <button
                 onClick={() => setActiveTab('checklist')}
@@ -262,310 +284,327 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
           </div>
 
           {/* Scrollable Printable Document Container */}
-          <div className="flex-1 overflow-y-auto p-4 sm:p-8 bg-slate-100 flex justify-center">
+          <div className="flex-1 overflow-y-auto p-4 sm:p-8 bg-slate-100 flex justify-center printable-content-wrapper">
             <div
               ref={printRef}
               id="printable-keepsake-album"
-              className="printable-document bg-white w-full max-w-[850px] shadow-lg rounded-2xl p-6 sm:p-12 text-slate-800 space-y-12 border border-slate-200"
+              className="printable-document bg-white w-full max-w-[850px] shadow-lg rounded-2xl p-6 sm:p-10 text-slate-800 space-y-10 border border-slate-200"
             >
               {/* PAGE 1: DIPLOMA / CERTIFICATE OF COMPLETION */}
-              <div className="relative border-8 border-double border-amber-300/80 rounded-3xl p-6 sm:p-10 bg-gradient-to-b from-[#FFFDF9] via-[#FFFAF4] to-[#FFF8F2] text-center overflow-hidden">
-                {/* Decorative background corners */}
-                <div className="absolute top-2 left-2 w-8 h-8 border-t-2 border-l-2 border-amber-500/70" />
-                <div className="absolute top-2 right-2 w-8 h-8 border-t-2 border-r-2 border-amber-500/70" />
-                <div className="absolute bottom-2 left-2 w-8 h-8 border-b-2 border-l-2 border-amber-500/70" />
-                <div className="absolute bottom-2 right-2 w-8 h-8 border-b-2 border-r-2 border-amber-500/70" />
+              {showCertificate && (
+                <div className="certificate-page relative border-[6px] border-double border-amber-400/90 rounded-3xl p-6 sm:p-10 bg-gradient-to-b from-[#FFFDF9] via-[#FFFAF4] to-[#FFF8F2] text-center overflow-hidden shadow-xs">
+                  {/* Decorative background corners */}
+                  <div className="absolute top-2 left-2 w-8 h-8 border-t-2 border-l-2 border-amber-600" />
+                  <div className="absolute top-2 right-2 w-8 h-8 border-t-2 border-r-2 border-amber-600" />
+                  <div className="absolute bottom-2 left-2 w-8 h-8 border-b-2 border-l-2 border-amber-600" />
+                  <div className="absolute bottom-2 right-2 w-8 h-8 border-b-2 border-r-2 border-amber-600" />
 
-                <div className="flex justify-center mb-3">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-amber-400 to-rose-400 text-white flex items-center justify-center shadow-md">
-                    <Award className="w-9 h-9" />
-                  </div>
-                </div>
-
-                <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.25em] text-amber-700 mb-1">
-                  Certificado de Culminación Devocional
-                </p>
-
-                <h1
-                  className="text-3xl sm:text-5xl font-black text-[#1a2f4c] tracking-tight mb-3"
-                  style={{ fontFamily: 'Georgia, serif' }}
-                >
-                  Desafío Bíblico de 30 Días
-                </h1>
-
-                <div className="flex items-center justify-center gap-3 my-2">
-                  <div className="h-[1px] w-16 sm:w-28 bg-gradient-to-r from-transparent to-rose-300" />
-                  <Heart className="w-5 h-5 text-rose-400 fill-rose-400" />
-                  <div className="h-[1px] w-16 sm:w-28 bg-gradient-to-l from-transparent to-rose-300" />
-                </div>
-
-                <p className="text-sm sm:text-base text-slate-600 italic font-serif mt-2 mb-4">
-                  Se otorga el presente reconocimiento con gozo y gratitud a:
-                </p>
-
-                {/* Partner Names Highlight */}
-                <div className="my-4 py-3 px-6 bg-white/80 backdrop-blur-xs rounded-2xl border border-rose-200/60 inline-block shadow-xs">
-                  <h2
-                    className="text-2xl sm:text-4xl font-extrabold text-rose-600 tracking-wide"
-                    style={{ fontFamily: 'Georgia, serif' }}
-                  >
-                    {partnerNames.flor} & {partnerNames.tereque}
-                  </h2>
-                </div>
-
-                <p className="text-sm sm:text-base text-slate-700 max-w-xl mx-auto leading-relaxed mt-2 mb-6">
-                  {customDedication}
-                </p>
-
-                {/* Statistics Highlights */}
-                <div className="grid grid-cols-3 gap-3 max-w-md mx-auto my-6 p-3 bg-white/90 rounded-2xl border border-amber-200/60 shadow-xs text-center">
+                  {/* Header Badge */}
                   <div>
-                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
-                      Lecturas Totales
-                    </span>
-                    <span className="text-xl font-black text-rose-600">
-                      {totalReadings}/60
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
-                      Días Juntos
-                    </span>
-                    <span className="text-xl font-black text-amber-600">
-                      {synchronizedDays}/30
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
-                      Cumplimiento
-                    </span>
-                    <span className="text-xl font-black text-emerald-600">
-                      {progressPercent}%
-                    </span>
-                  </div>
-                </div>
+                    <div className="flex justify-center mb-2">
+                      <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-tr from-amber-400 to-rose-400 text-white flex items-center justify-center shadow-md">
+                        <Award className="w-8 h-8 sm:w-9 sm:h-9" />
+                      </div>
+                    </div>
 
-                {/* Scripture Quote */}
-                <div className="my-6 p-4 rounded-2xl bg-amber-50/70 border border-amber-200/80 max-w-xl mx-auto">
-                  <p className="text-sm sm:text-base font-serif italic text-amber-950">
-                    «Lámpara es a mis pies tu palabra, y lumbrera a mi camino.»
-                  </p>
-                  <span className="text-xs font-bold text-amber-800 uppercase tracking-wider mt-1 block">
-                    — Salmo 119:105
-                  </span>
-                </div>
+                    <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.22em] text-amber-800 mb-1">
+                      Certificado de Culminación Devocional
+                    </p>
 
-                {/* Signatures and Date */}
-                <div className="grid grid-cols-2 gap-8 max-w-md mx-auto pt-6 mt-4 border-t border-slate-200/80 text-center">
-                  <div>
-                    <div className="h-9 flex items-end justify-center">
-                      <span className="font-serif italic text-base text-rose-600 font-semibold">
-                        {partnerNames.flor}
+                    <h1
+                      className="text-3xl sm:text-5xl font-black text-[#1a2f4c] tracking-tight mb-2"
+                      style={{ fontFamily: 'Georgia, serif' }}
+                    >
+                      Desafío Bíblico de 30 Días
+                    </h1>
+
+                    <div className="flex items-center justify-center gap-3 my-2">
+                      <div className="h-[1px] w-16 sm:w-28 bg-gradient-to-r from-transparent to-rose-300" />
+                      <Heart className="w-5 h-5 text-rose-500 fill-rose-500" />
+                      <div className="h-[1px] w-16 sm:w-28 bg-gradient-to-l from-transparent to-rose-300" />
+                    </div>
+
+                    <p className="text-sm sm:text-base text-slate-600 italic font-serif mt-2 mb-3">
+                      Se otorga el presente reconocimiento con gozo y gratitud a:
+                    </p>
+
+                    {/* Partner Names Highlight */}
+                    <div className="my-3 py-3 px-6 sm:px-8 bg-white/95 rounded-2xl border border-rose-200/80 inline-block shadow-xs">
+                      <h2
+                        className="text-2xl sm:text-4xl font-extrabold text-rose-600 tracking-wide"
+                        style={{ fontFamily: 'Georgia, serif' }}
+                      >
+                        {partnerNames.flor} & {partnerNames.tereque}
+                      </h2>
+                    </div>
+
+                    <p className="text-xs sm:text-sm text-slate-700 max-w-lg mx-auto leading-relaxed mt-2 mb-5">
+                      {customDedication}
+                    </p>
+                  </div>
+
+                  {/* Statistics Highlights */}
+                  <div className="grid grid-cols-3 gap-2 sm:gap-4 max-w-md mx-auto my-4 p-3 bg-white/95 rounded-2xl border border-amber-200/80 shadow-xs text-center">
+                    <div>
+                      <span className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider block">
+                        Lecturas Totales
+                      </span>
+                      <span className="text-lg sm:text-xl font-black text-rose-600">
+                        {totalReadings}/60
                       </span>
                     </div>
-                    <div className="border-t border-slate-400 mt-1 pt-1">
-                      <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                        Firma Devocional
+                    <div>
+                      <span className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider block">
+                        Días Juntos
+                      </span>
+                      <span className="text-lg sm:text-xl font-black text-amber-600">
+                        {synchronizedDays}/30
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider block">
+                        Cumplimiento
+                      </span>
+                      <span className="text-lg sm:text-xl font-black text-emerald-600">
+                        {progressPercent}%
                       </span>
                     </div>
                   </div>
 
-                  <div>
-                    <div className="h-9 flex items-end justify-center">
-                      <span className="font-serif italic text-base text-sky-600 font-semibold">
-                        {partnerNames.tereque}
-                      </span>
+                  {/* Scripture Quote */}
+                  <div className="my-4 p-3.5 sm:p-4 rounded-2xl bg-amber-50/80 border border-amber-200/90 max-w-xl mx-auto">
+                    <p className="text-xs sm:text-sm font-serif italic text-amber-950">
+                      «Lámpara es a mis pies tu palabra, y lumbrera a mi camino.»
+                    </p>
+                    <span className="text-[11px] font-bold text-amber-800 uppercase tracking-wider mt-1 block">
+                      — Salmo 119:105
+                    </span>
+                  </div>
+
+                  {/* Signatures and Date */}
+                  <div className="pt-4 border-t border-slate-200/90">
+                    <div className="grid grid-cols-2 gap-8 max-w-md mx-auto text-center">
+                      <div>
+                        <div className="h-8 flex items-end justify-center">
+                          <span className="font-serif italic text-sm sm:text-base text-rose-600 font-semibold truncate px-2">
+                            {partnerNames.flor}
+                          </span>
+                        </div>
+                        <div className="border-t border-slate-400 mt-1 pt-1">
+                          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                            Firma Devocional
+                          </span>
+                        </div>
+                      </div>
+
+                      <div>
+                        <div className="h-8 flex items-end justify-center">
+                          <span className="font-serif italic text-sm sm:text-base text-sky-600 font-semibold truncate px-2">
+                            {partnerNames.tereque}
+                          </span>
+                        </div>
+                        <div className="border-t border-slate-400 mt-1 pt-1">
+                          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                            Firma Devocional
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="border-t border-slate-400 mt-1 pt-1">
-                      <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                        Firma Devocional
-                      </span>
+
+                    <div className="mt-4 text-[11px] text-slate-500">
+                      Otorgado el <span className="font-semibold text-slate-700">{completionDate}</span>
                     </div>
                   </div>
                 </div>
-
-                <div className="mt-6 text-xs text-slate-400">
-                  Otorgado el <span className="font-semibold text-slate-600">{completionDate}</span>
-                </div>
-              </div>
+              )}
 
               {/* PAGE 2: 30 DAYS READING RECORD */}
-              <div className="print-page-break pt-4">
-                <div className="text-center pb-4 border-b border-slate-200 mb-6">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-50 text-rose-700 text-xs font-bold uppercase tracking-wider mb-1">
-                    <BookOpen className="w-3.5 h-3.5" /> Registro Completo
+              {showChecklist && (
+                <div className={`${showCertificate ? 'print-page-break' : ''} pt-2`}>
+                  <div className="text-center pb-4 border-b border-slate-200 mb-6">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-50 text-rose-700 text-xs font-bold uppercase tracking-wider mb-1">
+                      <BookOpen className="w-3.5 h-3.5" /> Registro Completo
+                    </div>
+                    <h2 className="text-2xl sm:text-3xl font-bold text-slate-800" style={{ fontFamily: 'Georgia, serif' }}>
+                      Las 30 Lecturas Bíblicas
+                    </h2>
+                    <p className="text-xs sm:text-sm text-slate-500">
+                      Plan devocional compartido por {partnerNames.flor} y {partnerNames.tereque}
+                    </p>
                   </div>
-                  <h2 className="text-2xl sm:text-3xl font-bold text-slate-800" style={{ fontFamily: 'Georgia, serif' }}>
-                    Las 30 Lecturas Bíblicas
-                  </h2>
-                  <p className="text-xs sm:text-sm text-slate-500">
-                    Plan devocional compartido por {partnerNames.flor} y {partnerNames.tereque}
-                  </p>
-                </div>
 
-                <div className="space-y-6">
-                  {challengeData.map((week, wIdx) => (
-                    <div key={wIdx} className="print-avoid-break p-4 rounded-2xl border border-slate-200 bg-[#FAFAFA]">
-                      <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-200">
-                        <h3 className="font-bold text-sm sm:text-base text-slate-800">
-                          {typeof week.week === 'number' ? `Semana ${week.week}:` : `${week.week}:`} {week.title}
-                        </h3>
-                        <div className="flex gap-4 text-xs font-bold">
-                          <span className="text-rose-600">{partnerNames.flor.split(' ')[0]}</span>
-                          <span className="text-sky-600">{partnerNames.tereque.split(' ')[0]}</span>
+                  <div className="space-y-6">
+                    {challengeData.map((week, wIdx) => (
+                      <div key={wIdx} className="print-avoid-break p-4 rounded-2xl border border-slate-200 bg-[#FAFAFA]">
+                        <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-200">
+                          <h3 className="font-bold text-sm sm:text-base text-slate-800">
+                            {typeof week.week === 'number' ? `Semana ${week.week}:` : `${week.week}:`} {week.title}
+                          </h3>
+                          <div className="flex gap-4 text-xs font-bold">
+                            <span className="text-rose-600">{partnerNames.flor.split(' ')[0]}</span>
+                            <span className="text-sky-600">{partnerNames.tereque.split(' ')[0]}</span>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          {week.days.map((day) => {
+                            const state = checkedDays[day.num] || { flor: false, tereque: false };
+                            return (
+                              <div
+                                key={day.num}
+                                className="flex items-center justify-between p-2 rounded-xl bg-white border border-slate-100 text-xs"
+                              >
+                                <div className="flex items-center gap-2">
+                                  <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-[10px]">
+                                    {day.num}
+                                  </span>
+                                  <span className="font-medium text-slate-800">{day.reading}</span>
+                                </div>
+                                <div className="flex gap-3 items-center">
+                                  <span
+                                    className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[10px] ${
+                                      state.flor
+                                        ? 'bg-rose-500 text-white'
+                                        : 'bg-slate-100 text-slate-400'
+                                    }`}
+                                  >
+                                    {state.flor ? '✓' : '—'}
+                                  </span>
+                                  <span
+                                    className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[10px] ${
+                                      state.tereque
+                                        ? 'bg-sky-500 text-white'
+                                        : 'bg-slate-100 text-slate-400'
+                                    }`}
+                                  >
+                                    {state.tereque ? '✓' : '—'}
+                                  </span>
+                                </div>
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        {week.days.map((day) => {
-                          const state = checkedDays[day.num] || { flor: false, tereque: false };
-                          return (
-                            <div
-                              key={day.num}
-                              className="flex items-center justify-between p-2 rounded-xl bg-white border border-slate-100 text-xs"
-                            >
-                              <div className="flex items-center gap-2">
-                                <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-[10px]">
-                                  {day.num}
-                                </span>
-                                <span className="font-medium text-slate-800">{day.reading}</span>
-                              </div>
-                              <div className="flex gap-3 items-center">
-                                <span
-                                  className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[10px] ${
-                                    state.flor
-                                      ? 'bg-rose-500 text-white'
-                                      : 'bg-slate-100 text-slate-400'
-                                  }`}
-                                >
-                                  {state.flor ? '✓' : '—'}
-                                </span>
-                                <span
-                                  className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[10px] ${
-                                    state.tereque
-                                      ? 'bg-sky-500 text-white'
-                                      : 'bg-slate-100 text-slate-400'
-                                  }`}
-                                >
-                                  {state.tereque ? '✓' : '—'}
-                                </span>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* PAGE 3: KEEPSAKE DEVOTIONAL REFLECTIONS */}
-              <div className="print-page-break pt-4">
-                <div className="text-center pb-4 border-b border-slate-200 mb-6">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-50 text-purple-700 text-xs font-bold uppercase tracking-wider mb-1">
-                    <Heart className="w-3.5 h-3.5 fill-purple-500" /> Diario Devocional de la Pareja
+              {showReflections && (
+                <div className={`${(showCertificate || showChecklist) ? 'print-page-break' : ''} pt-2`}>
+                  <div className="text-center pb-4 border-b border-slate-200 mb-6">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-50 text-purple-700 text-xs font-bold uppercase tracking-wider mb-1">
+                      <Heart className="w-3.5 h-3.5 fill-purple-500" /> Diario Devocional de la Pareja
+                    </div>
+                    <h2 className="text-2xl sm:text-3xl font-bold text-slate-800" style={{ fontFamily: 'Georgia, serif' }}>
+                      Nuestras Reflexiones Escritas
+                    </h2>
+                    <p className="text-xs sm:text-sm text-slate-500">
+                      Pensamientos, oraciones y testimonios guardados durante los 30 días
+                    </p>
                   </div>
-                  <h2 className="text-2xl sm:text-3xl font-bold text-slate-800" style={{ fontFamily: 'Georgia, serif' }}>
-                    Nuestras Reflexiones Escritas
-                  </h2>
-                  <p className="text-xs sm:text-sm text-slate-500">
-                    Pensamientos, oraciones y testimonios guardados durante los 30 días
-                  </p>
-                </div>
 
-                <div className="space-y-6">
-                  {challengeData.map((week, idx) => {
-                    const ansFlor = answers[idx]?.flor;
-                    const ansTereque = answers[idx]?.tereque;
-                    const hasAnyReflection = !!ansFlor || !!ansTereque;
+                  <div className="space-y-6">
+                    {challengeData.map((week, idx) => {
+                      const ansFlor = answers[idx]?.flor;
+                      const ansTereque = answers[idx]?.tereque;
 
-                    return (
-                      <div
-                        key={idx}
-                        className="print-avoid-break p-5 rounded-2xl border border-slate-200 bg-[#FFFDFB] space-y-4 shadow-xs"
-                      >
-                        <div className="border-b border-slate-200 pb-2">
-                          <span className="text-xs font-bold text-rose-600 uppercase tracking-wider">
-                            {typeof week.week === 'number' ? `Semana ${week.week}` : week.week}
-                          </span>
-                          <h3 className="text-base sm:text-lg font-bold text-slate-800" style={{ fontFamily: 'Georgia, serif' }}>
-                            {week.title}
-                          </h3>
-                          {week.subtitle && (
-                            <p className="text-xs text-slate-500 italic mt-0.5">{week.subtitle}</p>
-                          )}
-                        </div>
-
-                        {/* Reflections of both partners */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {/* Flor */}
-                          <div className="p-4 rounded-xl bg-rose-50/60 border border-rose-200 flex flex-col">
-                            <div className="flex items-center gap-1.5 text-xs font-bold text-rose-700 mb-2 uppercase tracking-wider">
-                              <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" />
-                              <span>{partnerNames.flor}</span>
-                            </div>
-                            <p className="text-xs sm:text-sm text-slate-800 whitespace-pre-wrap leading-relaxed flex-1">
-                              {ansFlor ? (
-                                `"${ansFlor}"`
-                              ) : (
-                                <span className="text-slate-400 italic">
-                                  (Sin notas escritas para esta semana)
-                                </span>
-                              )}
-                            </p>
+                      return (
+                        <div
+                          key={idx}
+                          className="print-avoid-break p-5 rounded-2xl border border-slate-200 bg-[#FFFDFB] space-y-4 shadow-xs"
+                        >
+                          <div className="border-b border-slate-200 pb-2">
+                            <span className="text-xs font-bold text-rose-600 uppercase tracking-wider">
+                              {typeof week.week === 'number' ? `Semana ${week.week}` : week.week}
+                            </span>
+                            <h3 className="text-base sm:text-lg font-bold text-slate-800" style={{ fontFamily: 'Georgia, serif' }}>
+                              {week.title}
+                            </h3>
+                            {week.subtitle && (
+                              <p className="text-xs text-slate-500 italic mt-0.5">{week.subtitle}</p>
+                            )}
                           </div>
 
-                          {/* Tereque */}
-                          <div className="p-4 rounded-xl bg-sky-50/60 border border-sky-200 flex flex-col">
-                            <div className="flex items-center gap-1.5 text-xs font-bold text-sky-700 mb-2 uppercase tracking-wider">
-                              <Sparkles className="w-3.5 h-3.5 text-sky-500" />
-                              <span>{partnerNames.tereque}</span>
+                          {/* Reflections of both partners */}
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {/* Flor */}
+                            <div className="p-4 rounded-xl bg-rose-50/60 border border-rose-200 flex flex-col">
+                              <div className="flex items-center gap-1.5 text-xs font-bold text-rose-700 mb-2 uppercase tracking-wider">
+                                <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" />
+                                <span>{partnerNames.flor}</span>
+                              </div>
+                              <p className="text-xs sm:text-sm text-slate-800 whitespace-pre-wrap leading-relaxed flex-1">
+                                {ansFlor ? (
+                                  `"${ansFlor}"`
+                                ) : (
+                                  <span className="text-slate-400 italic">
+                                    (Sin notas escritas para esta semana)
+                                  </span>
+                                )}
+                              </p>
                             </div>
-                            <p className="text-xs sm:text-sm text-slate-800 whitespace-pre-wrap leading-relaxed flex-1">
-                              {ansTereque ? (
-                                `"${ansTereque}"`
-                              ) : (
-                                <span className="text-slate-400 italic">
-                                  (Sin notas escritas para esta semana)
-                                </span>
-                              )}
-                            </p>
+
+                            {/* Tereque */}
+                            <div className="p-4 rounded-xl bg-sky-50/60 border border-sky-200 flex flex-col">
+                              <div className="flex items-center gap-1.5 text-xs font-bold text-sky-700 mb-2 uppercase tracking-wider">
+                                <Sparkles className="w-3.5 h-3.5 text-sky-500" />
+                                <span>{partnerNames.tereque}</span>
+                              </div>
+                              <p className="text-xs sm:text-sm text-slate-800 whitespace-pre-wrap leading-relaxed flex-1">
+                                {ansTereque ? (
+                                  `"${ansTereque}"`
+                                ) : (
+                                  <span className="text-slate-400 italic">
+                                    (Sin notas escritas para esta semana)
+                                  </span>
+                                )}
+                              </p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                      );
+                    })}
+                  </div>
 
-                {/* Final Closing Blessing */}
-                <div className="print-avoid-break mt-8 p-6 text-center bg-gradient-to-r from-rose-50 via-amber-50 to-sky-50 rounded-2xl border border-rose-200">
-                  <p className="font-serif italic text-sm sm:text-base text-slate-800">
-                    «El Señor te bendiga y te guarde; el Señor haga resplandecer su rostro sobre ti y tenga de ti misericordia; el Señor alce sobre ti su rostro y ponga en ti paz.»
-                  </p>
-                  <span className="text-xs font-bold text-slate-600 block mt-2">
-                    — Números 6:24-26
-                  </span>
+                  {/* Final Closing Blessing */}
+                  <div className="print-avoid-break mt-8 p-6 text-center bg-gradient-to-r from-rose-50 via-amber-50 to-sky-50 rounded-2xl border border-rose-200">
+                    <p className="font-serif italic text-sm sm:text-base text-slate-800">
+                      «El Señor te bendiga y te guarde; el Señor haga resplandecer su rostro sobre ti y tenga de ti misericordia; el Señor alce sobre ti su rostro y ponga en ti paz.»
+                    </p>
+                    <span className="text-xs font-bold text-slate-600 block mt-2">
+                      — Números 6:24-26
+                    </span>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
 
-          {/* Footer toolbar */}
-          <div className="p-4 bg-white border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+          {/* Footer toolbar (No print) */}
+          <div className="p-4 bg-white border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 no-print">
             <p className="text-xs text-slate-500">
-              💡 <strong>Consejo de impresión:</strong> Seleccioná "Guardar como PDF" o tu impresora a color en tamaño A4/Carta.
+              💡 <strong>Consejo:</strong> En el menú de impresión, seleccioná <em>"Guardar como PDF"</em> o tu impresora a color con <em>"Gráficos de fondo"</em> activado.
             </p>
             <div className="flex items-center gap-2">
               <button
                 onClick={onClose}
-                className="px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-600 hover:bg-slate-100"
+                className="px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-600 hover:bg-slate-100 cursor-pointer"
               >
                 Cerrar
               </button>
               <button
+                onClick={handlePrint}
+                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs sm:text-sm font-semibold flex items-center gap-1.5 shadow-sm cursor-pointer"
+              >
+                <Printer className="w-4 h-4 text-amber-300" />
+                <span>Imprimir</span>
+              </button>
+              <button
                 onClick={handleDownloadPDF}
                 disabled={isGenerating}
-                className="px-5 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-xs sm:text-sm font-semibold flex items-center gap-1.5 shadow-sm transition-all"
+                className="px-5 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-xs sm:text-sm font-semibold flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
               >
                 {isGenerating ? (
                   <>

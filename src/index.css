@@ -2,39 +2,104 @@
 
 @layer utilities {
   @media print {
-    /* Hide all regular web UI and modal overlays */
+    @page {
+      size: A4 portrait;
+      margin: 8mm 8mm 8mm 8mm;
+    }
+
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+
+    html,
     body {
       background-color: #ffffff !important;
-      color: #000000 !important;
-      font-size: 12pt;
+      color: #1e293b !important;
+      font-size: 11pt;
+      margin: 0 !important;
+      padding: 0 !important;
+      width: 100% !important;
+      height: auto !important;
+      overflow: visible !important;
     }
-    
+
+    /* Hide standard UI elements */
+    .no-print,
     header,
     footer,
-    main > section,
-    .no-print,
-    button {
+    button,
+    input,
+    textarea,
+    nav {
       display: none !important;
+    }
+
+    /* Modal unwrap for printing */
+    .printable-modal-overlay {
+      position: static !important;
+      display: block !important;
+      width: 100% !important;
+      height: auto !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      background: transparent !important;
+      overflow: visible !important;
+    }
+
+    .printable-modal-card {
+      position: static !important;
+      display: block !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      max-height: none !important;
+      height: auto !important;
+      border: none !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      background: transparent !important;
+      overflow: visible !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    .printable-content-wrapper {
+      padding: 0 !important;
+      margin: 0 !important;
+      background: transparent !important;
+      overflow: visible !important;
     }
 
     .printable-document {
       display: block !important;
       position: static !important;
       width: 100% !important;
+      max-width: 100% !important;
       margin: 0 !important;
       padding: 0 !important;
       box-shadow: none !important;
-      background: white !important;
+      border: none !important;
+      background: #ffffff !important;
     }
 
     .print-page-break {
-      page-break-before: always;
-      break-before: page;
+      page-break-before: always !important;
+      break-before: page !important;
     }
 
     .print-avoid-break {
-      page-break-inside: avoid;
-      break-inside: avoid;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+
+    .certificate-page {
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      min-height: 250mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
   }
 }

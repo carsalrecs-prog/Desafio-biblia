@@ -161,8 +161,10 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#FFFBF7] text-slate-800 font-sans selection:bg-rose-200">
-      {/* Top Floating Badge for Desktop */}
-      <header className="pt-8 pb-4 px-4 max-w-5xl mx-auto text-center relative">
+      {/* Interactive web application content (hidden when printing) */}
+      <div className="no-print">
+        {/* Top Floating Badge for Desktop */}
+        <header className="pt-8 pb-4 px-4 max-w-5xl mx-auto text-center relative">
         <div className="hidden md:flex absolute top-6 right-4 bg-gradient-to-r from-rose-100 to-rose-50 text-rose-800 px-4 py-2.5 rounded-2xl shadow-sm border border-rose-200/80 transform rotate-2 flex-col items-center justify-center">
           <span className="font-bold text-xs uppercase tracking-wider text-rose-500">
             Lema devocional
@@ -447,6 +449,7 @@ export default function App() {
           </button>
         </footer>
       </main>
+      </div>
 
       {/* Modals */}
       <CelebrationModal
