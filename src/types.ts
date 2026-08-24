@@ -36,3 +36,10 @@ export interface ReflectionAnswers {
   flor?: string;
   tereque?: string;
 }
+
+export interface CertificateConfig {
+  completionDate: string;
+  customDedication: string;
+  includeChecklist: boolean;
+  includeReflections: boolean;
+}

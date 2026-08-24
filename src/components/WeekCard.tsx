@@ -1,5 +1,5 @@
-import React from 'react';
-import { Check, Heart, Sparkles, BookOpen } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Check, Heart, Sparkles, BookOpen, CheckCircle2 } from 'lucide-react';
 import { WeekChallenge, DayProgress, PartnerNames, ReflectionAnswers, DayItem } from '../types';
 
 interface WeekCardProps {
@@ -35,6 +35,9 @@ export const WeekCard: React.FC<WeekCardProps> = ({
     if (dayState.tereque) terequeWeekCompleted++;
     if (dayState.flor && dayState.tereque) bothWeekCompleted++;
   });
+
+  const hasFlorReflection = !!answers[sectionIdx]?.flor;
+  const hasTerequeReflection = !!answers[sectionIdx]?.tereque;
 
   return (
     <section
@@ -184,10 +187,16 @@ export const WeekCard: React.FC<WeekCardProps> = ({
       {/* Right Column: Weekly Reflections & Notes */}
       <div className="p-5 sm:p-6 lg:w-[38%] bg-white/30 flex flex-col justify-between">
         <div>
-          <h3 className={`font-bold mb-3 text-base sm:text-lg flex items-center gap-2 ${section.theme.lightText}`}>
-            <Sparkles className="w-4 h-4" /> Reflexiona:
-          </h3>
-          <ul className="space-y-2 mb-5">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className={`font-bold text-base sm:text-lg flex items-center gap-2 ${section.theme.lightText}`}>
+              <Sparkles className="w-4 h-4" /> Reflexiona:
+            </h3>
+            <span className="text-[11px] text-emerald-700 bg-emerald-100/80 px-2 py-0.5 rounded-full font-medium flex items-center gap-1">
+              <CheckCircle2 className="w-3 h-3" /> Auto-guardado
+            </span>
+          </div>
+
+          <ul className="space-y-1.5 mb-4">
             {section.reflections.map((ref, i) => (
               <li key={i} className="flex items-start text-xs sm:text-sm text-slate-700 leading-snug">
                 <span
@@ -203,31 +212,41 @@ export const WeekCard: React.FC<WeekCardProps> = ({
         <div className="space-y-3 pt-2">
           {/* Partner 1 (Flor) */}
           <div className="flex flex-col">
-            <label className="text-xs font-bold text-rose-700 uppercase tracking-wider mb-1 ml-1 flex items-center gap-1.5">
-              <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" />
-              <span>{partnerNames.flor}</span>
-            </label>
+            <div className="flex items-center justify-between mb-1 ml-1">
+              <label className="text-xs font-bold text-rose-700 uppercase tracking-wider flex items-center gap-1.5">
+                <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" />
+                <span>{partnerNames.flor}</span>
+              </label>
+              {hasFlorReflection && (
+                <span className="text-[10px] text-rose-500 font-semibold">Guardado en PDF</span>
+              )}
+            </div>
             <textarea
               value={answers[sectionIdx]?.flor || ''}
               onChange={(e) => onUpdateAnswer(sectionIdx, 'flor', e.target.value)}
               placeholder={`Reflexiones y aprendizajes de ${partnerNames.flor}...`}
               rows={2}
-              className="w-full text-xs sm:text-sm p-3 rounded-xl border border-rose-200 bg-rose-50/70 text-rose-950 focus:outline-none focus:ring-2 focus:ring-rose-400 focus:bg-white transition-all resize-y min-h-[64px] placeholder:text-rose-400/70 shadow-sm"
+              className="w-full text-xs sm:text-sm p-3 rounded-xl border border-rose-200 bg-rose-50/70 text-rose-950 focus:outline-none focus:ring-2 focus:ring-rose-400 focus:bg-white transition-all resize-y min-h-[68px] placeholder:text-rose-400/70 shadow-sm"
             />
           </div>
 
           {/* Partner 2 (Tereque) */}
           <div className="flex flex-col">
-            <label className="text-xs font-bold text-sky-700 uppercase tracking-wider mb-1 ml-1 flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-sky-500" />
-              <span>{partnerNames.tereque}</span>
-            </label>
+            <div className="flex items-center justify-between mb-1 ml-1">
+              <label className="text-xs font-bold text-sky-700 uppercase tracking-wider flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-sky-500" />
+                <span>{partnerNames.tereque}</span>
+              </label>
+              {hasTerequeReflection && (
+                <span className="text-[10px] text-sky-600 font-semibold">Guardado en PDF</span>
+              )}
+            </div>
             <textarea
               value={answers[sectionIdx]?.tereque || ''}
               onChange={(e) => onUpdateAnswer(sectionIdx, 'tereque', e.target.value)}
               placeholder={`Reflexiones y aprendizajes de ${partnerNames.tereque}...`}
               rows={2}
-              className="w-full text-xs sm:text-sm p-3 rounded-xl border border-sky-200 bg-sky-50/70 text-sky-950 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:bg-white transition-all resize-y min-h-[64px] placeholder:text-sky-400/70 shadow-sm"
+              className="w-full text-xs sm:text-sm p-3 rounded-xl border border-sky-200 bg-sky-50/70 text-sky-950 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:bg-white transition-all resize-y min-h-[68px] placeholder:text-sky-400/70 shadow-sm"
             />
           </div>
         </div>

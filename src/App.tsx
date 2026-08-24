@@ -11,6 +11,9 @@ import {
   Flame,
   Award,
   Filter,
+  Download,
+  FileCheck,
+  Save,
 } from 'lucide-react';
 import { challengeData } from './data/challengeData';
 import { DayItem, DayProgress, PartnerNames, ReflectionAnswers } from './types';
@@ -19,6 +22,7 @@ import { CelebrationModal } from './components/CelebrationModal';
 import { BiblePassageModal } from './components/BiblePassageModal';
 import { PartnerNamesModal } from './components/PartnerNamesModal';
 import { ShareNotesModal } from './components/ShareNotesModal';
+import { CertificatePdfModal } from './components/CertificatePdfModal';
 
 export default function App() {
   // State for checked days
@@ -35,6 +39,7 @@ export default function App() {
   const [activeReadingModal, setActiveReadingModal] = useState<DayItem | null>(null);
   const [isNamesModalOpen, setIsNamesModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [isCertificateModalOpen, setIsCertificateModalOpen] = useState(false);
   const [selectedWeekFilter, setSelectedWeekFilter] = useState<number | 'all'>('all');
 
   // Load saved progress on launch
@@ -60,7 +65,7 @@ export default function App() {
     setMounted(true);
   }, []);
 
-  // Save changes to localStorage
+  // Save changes to localStorage immediately on any change
   useEffect(() => {
     if (mounted) {
       localStorage.setItem('desafioBiblicoProgress', JSON.stringify(checkedDays));
@@ -125,7 +130,7 @@ export default function App() {
   const handleResetProgress = () => {
     if (
       window.confirm(
-        '¿Estás seguro de que querés reiniciar el progreso de lecturas? (Las notas de reflexión no se borrarán)'
+        '¿Estás seguro de que querés reiniciar los checks de lecturas? (Tus reflexiones escritas NO se borrarán)'
       )
     ) {
       setCheckedDays({});
@@ -146,6 +151,7 @@ export default function App() {
 
   const totalCompleted = completedFlor + completedTereque;
   const progressPercent = Math.round((totalCompleted / 60) * 100);
+  const isFullyCompleted = progressPercent === 100;
 
   // Filtered sections
   const displayedSections =
@@ -193,11 +199,22 @@ export default function App() {
           <Heart className="w-4 h-4 text-rose-400 fill-rose-400 flex-shrink-0" />
         </p>
 
-        {/* Action buttons bar (Personalizar Nombres, Compartir Notas, Reiniciar) */}
+        {/* Action buttons bar (PDF, Nombres, Compartir Notas, Reiniciar) */}
         <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-3 mt-5">
+          {/* Main PDF Certificate Button */}
+          <button
+            onClick={() => setIsCertificateModalOpen(true)}
+            className="px-4 py-2 rounded-full bg-gradient-to-r from-rose-500 via-rose-600 to-amber-500 text-white text-xs sm:text-sm font-bold shadow-md shadow-rose-200 hover:shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
+            title="Ver y descargar certificado en PDF con todas las reflexiones"
+          >
+            <Award className="w-4 h-4 text-amber-200" />
+            <span>Descargar PDF / Certificado</span>
+            <Sparkles className="w-3.5 h-3.5 text-amber-200" />
+          </button>
+
           <button
             onClick={() => setIsNamesModalOpen(true)}
-            className="px-3.5 py-1.5 rounded-full bg-white text-xs sm:text-sm font-semibold text-slate-700 hover:text-rose-600 border border-slate-200/80 shadow-xs hover:shadow-sm transition-all flex items-center gap-1.5"
+            className="px-3.5 py-2 rounded-full bg-white text-xs sm:text-sm font-semibold text-slate-700 hover:text-rose-600 border border-slate-200/80 shadow-xs hover:shadow-sm transition-all flex items-center gap-1.5"
             title="Personalizar nombres de la pareja"
           >
             <UserCheck className="w-4 h-4 text-rose-500" />
@@ -206,20 +223,20 @@ export default function App() {
 
           <button
             onClick={() => setIsShareModalOpen(true)}
-            className="px-3.5 py-1.5 rounded-full bg-white text-xs sm:text-sm font-semibold text-slate-700 hover:text-sky-600 border border-slate-200/80 shadow-xs hover:shadow-sm transition-all flex items-center gap-1.5"
-            title="Compartir o exportar reflexiones"
+            className="px-3.5 py-2 rounded-full bg-white text-xs sm:text-sm font-semibold text-slate-700 hover:text-sky-600 border border-slate-200/80 shadow-xs hover:shadow-sm transition-all flex items-center gap-1.5"
+            title="Compartir o exportar reflexiones en texto"
           >
             <Share2 className="w-4 h-4 text-sky-500" />
-            <span>Compartir Reflexiones</span>
+            <span>Copiar Texto</span>
           </button>
 
           <button
             onClick={handleResetProgress}
-            className="px-3.5 py-1.5 rounded-full bg-white text-xs sm:text-sm font-medium text-slate-500 hover:text-slate-700 border border-slate-200/80 shadow-xs hover:shadow-sm transition-all flex items-center gap-1.5"
+            className="px-3 py-2 rounded-full bg-white text-xs sm:text-sm font-medium text-slate-400 hover:text-slate-600 border border-slate-200/80 shadow-xs hover:shadow-sm transition-all flex items-center gap-1.5"
             title="Reiniciar checks"
           >
             <RotateCcw className="w-3.5 h-3.5" />
-            <span>Reiniciar Checks</span>
+            <span>Reiniciar</span>
           </button>
         </div>
 
@@ -289,11 +306,24 @@ export default function App() {
             </div>
           </div>
 
-          {progressPercent === 100 && (
-            <div className="mt-4 p-3 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800 font-bold text-sm flex items-center justify-center gap-2 animate-bounce">
-              <Sparkles className="w-5 h-5 text-emerald-600" />
-              <span>¡Gloria a Dios! Han completado los 30 días del desafío bíblico juntos.</span>
-              <Sparkles className="w-5 h-5 text-emerald-600" />
+          {/* Completion celebratory card */}
+          {isFullyCompleted && (
+            <div className="mt-5 p-4 bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 border-2 border-emerald-300 rounded-2xl text-center space-y-2 animate-bounce">
+              <div className="flex items-center justify-center gap-2 text-emerald-800 font-extrabold text-base">
+                <Sparkles className="w-5 h-5 text-emerald-600" />
+                <span>¡Felicitaciones! ¡Completaron el Desafío Bíblico de 30 Días!</span>
+                <Sparkles className="w-5 h-5 text-emerald-600" />
+              </div>
+              <p className="text-xs text-emerald-700">
+                Ya pueden descargar su certificado oficial con sus reflexiones de recuerdo.
+              </p>
+              <button
+                onClick={() => setIsCertificateModalOpen(true)}
+                className="mt-2 inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all"
+              >
+                <Award className="w-4 h-4" />
+                <span>Ver y Descargar Certificado de Recuerdo</span>
+              </button>
             </div>
           )}
         </div>
@@ -330,7 +360,6 @@ export default function App() {
       <main className="max-w-6xl mx-auto px-4 pb-16 space-y-6">
         {/* Weekly Challenge Cards */}
         {displayedSections.map((section) => {
-          // Find original index in challengeData
           const originalIdx = challengeData.findIndex((s) => s.week === section.week);
           return (
             <WeekCard
@@ -391,7 +420,7 @@ export default function App() {
               </li>
               <li className="flex items-start gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0" />
-                <span>Tomate unos minutos para reflexionar y orar juntos.</span>
+                <span>Tus reflexiones se guardan automáticamente en tu dispositivo.</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0" />
@@ -404,10 +433,18 @@ export default function App() {
         </div>
 
         {/* Footer */}
-        <footer className="text-center pt-8 pb-4 text-rose-500 font-medium flex items-center justify-center gap-2">
-          <Heart className="w-4 h-4 fill-rose-400 text-rose-400" />
-          <span>¡Ustedes pueden! 30 días transformarán sus corazones</span>
-          <Heart className="w-4 h-4 fill-rose-400 text-rose-400" />
+        <footer className="text-center pt-8 pb-4 text-rose-500 font-medium flex flex-col items-center justify-center gap-2">
+          <div className="flex items-center gap-2">
+            <Heart className="w-4 h-4 fill-rose-400 text-rose-400" />
+            <span>¡Ustedes pueden! 30 días transformarán sus corazones</span>
+            <Heart className="w-4 h-4 fill-rose-400 text-rose-400" />
+          </div>
+          <button
+            onClick={() => setIsCertificateModalOpen(true)}
+            className="text-xs font-semibold text-slate-500 hover:text-rose-600 underline underline-offset-4 mt-1 transition-colors"
+          >
+            Imprimir o descargar libro devocional en PDF
+          </button>
         </footer>
       </main>
 
@@ -433,6 +470,15 @@ export default function App() {
       <ShareNotesModal
         isOpen={isShareModalOpen}
         onClose={() => setIsShareModalOpen(false)}
+        partnerNames={partnerNames}
+        challengeData={challengeData}
+        checkedDays={checkedDays}
+        answers={answers}
+      />
+
+      <CertificatePdfModal
+        isOpen={isCertificateModalOpen}
+        onClose={() => setIsCertificateModalOpen(false)}
         partnerNames={partnerNames}
         challengeData={challengeData}
         checkedDays={checkedDays}

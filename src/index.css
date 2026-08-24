@@ -1,1 +1,40 @@
 @import "tailwindcss";
+
+@layer utilities {
+  @media print {
+    /* Hide all regular web UI and modal overlays */
+    body {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+      font-size: 12pt;
+    }
+    
+    header,
+    footer,
+    main > section,
+    .no-print,
+    button {
+      display: none !important;
+    }
+
+    .printable-document {
+      display: block !important;
+      position: static !important;
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      box-shadow: none !important;
+      background: white !important;
+    }
+
+    .print-page-break {
+      page-break-before: always;
+      break-before: page;
+    }
+
+    .print-avoid-break {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+  }
+}
