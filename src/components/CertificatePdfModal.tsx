@@ -46,7 +46,7 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
     });
   });
   const [customDedication, setCustomDedication] = useState(
-    'Por haber caminado juntos durante 30 días en la presencia de Dios, fortaleciendo su fe, su amor y su devoción mutua a través de Su Santa Palabra.'
+    'Por haber caminado juntos a través de los 28 capítulos del Santo Evangelio de Mateo, fortaleciendo su fe, su amor y su devoción mutua a los pies de Jesús.'
   );
   const [activeTab, setActiveTab] = useState<'all' | 'certificate' | 'checklist' | 'reflections'>('all');
 
@@ -54,12 +54,12 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
 
   if (!isOpen) return null;
 
-  // Calculate statistics
+  // Calculate statistics for all 28 chapters
   let totalFlor = 0;
   let totalTereque = 0;
   let synchronizedDays = 0;
 
-  for (let i = 1; i <= 30; i++) {
+  for (let i = 1; i <= 28; i++) {
     const d = checkedDays[i];
     if (d?.flor) totalFlor++;
     if (d?.tereque) totalTereque++;
@@ -67,7 +67,7 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
   }
 
   const totalReadings = totalFlor + totalTereque;
-  const progressPercent = Math.round((totalReadings / 60) * 100);
+  const progressPercent = Math.round((totalReadings / 56) * 100);
 
   // Download PDF handler using html2canvas & jsPDF
   const handleDownloadPDF = async () => {
@@ -118,17 +118,17 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
         activeTab === 'certificate'
           ? 'Certificado'
           : activeTab === 'checklist'
-          ? 'Lecturas'
+          ? 'Lecturas_Mateo'
           : activeTab === 'reflections'
           ? 'Reflexiones'
           : 'Album_Completo';
 
-      const fileName = `Desafio_Biblico_${modeName}_${partnerNames.flor}_y_${partnerNames.tereque}.pdf`
+      const fileName = `Desafio_Mateo_${modeName}_${partnerNames.flor}_y_${partnerNames.tereque}.pdf`
         .replace(/\s+/g, '_');
       pdf.save(fileName);
     } catch (error) {
       console.error('Error generating PDF:', error);
-      alert('Hubo un inconveniente al generar el PDF. Podés usar el botón "Imprimir" y elegir "Guardar como PDF".');
+      alert('Hubo un inconveniente al generar el archivo. Podés pulsar el botón "Imprimir" y elegir "Guardar como PDF".');
     } finally {
       setIsGenerating(false);
     }
@@ -169,11 +169,11 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
               </div>
               <div>
                 <h2 className="text-lg sm:text-xl font-bold text-slate-800 flex items-center gap-2">
-                  <span>Certificado & Libro de Recuerdos</span>
+                  <span>Certificado & Álbum de Mateo</span>
                   <Sparkles className="w-4 h-4 text-amber-500" />
                 </h2>
                 <p className="text-xs text-slate-500">
-                  Imprimí o descargá en PDF el certificado oficial y sus reflexiones
+                  Imprimí o descargá en PDF el certificado de los 28 capítulos y sus reflexiones
                 </p>
               </div>
             </div>
@@ -209,7 +209,7 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
 
               <button
                 onClick={onClose}
-                className="p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition-colors ml-1"
+                className="p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition-colors ml-1 cursor-pointer"
                 aria-label="Cerrar"
               >
                 <X className="w-5 h-5" />
@@ -242,17 +242,17 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
             <div className="flex items-center gap-1 bg-white p-1 rounded-xl border border-slate-200">
               <button
                 onClick={() => setActiveTab('all')}
-                className={`px-3 py-1 rounded-lg font-medium transition-all ${
+                className={`px-3 py-1 rounded-lg font-medium transition-all cursor-pointer ${
                   activeTab === 'all'
                     ? 'bg-rose-500 text-white shadow-xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                Todo el Álbum (3 pág)
+                Todo el Álbum
               </button>
               <button
                 onClick={() => setActiveTab('certificate')}
-                className={`px-3 py-1 rounded-lg font-medium transition-all ${
+                className={`px-3 py-1 rounded-lg font-medium transition-all cursor-pointer ${
                   activeTab === 'certificate'
                     ? 'bg-rose-500 text-white shadow-xs'
                     : 'text-slate-600 hover:text-slate-900'
@@ -262,17 +262,17 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
               </button>
               <button
                 onClick={() => setActiveTab('checklist')}
-                className={`px-3 py-1 rounded-lg font-medium transition-all ${
+                className={`px-3 py-1 rounded-lg font-medium transition-all cursor-pointer ${
                   activeTab === 'checklist'
                     ? 'bg-rose-500 text-white shadow-xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                30 Lecturas
+                28 Capítulos
               </button>
               <button
                 onClick={() => setActiveTab('reflections')}
-                className={`px-3 py-1 rounded-lg font-medium transition-all ${
+                className={`px-3 py-1 rounded-lg font-medium transition-all cursor-pointer ${
                   activeTab === 'reflections'
                     ? 'bg-rose-500 text-white shadow-xs'
                     : 'text-slate-600 hover:text-slate-900'
@@ -315,7 +315,7 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
                       className="text-3xl sm:text-5xl font-black text-[#1a2f4c] tracking-tight mb-2"
                       style={{ fontFamily: 'Georgia, serif' }}
                     >
-                      Desafío Bíblico de 30 Días
+                      El Evangelio de Mateo
                     </h1>
 
                     <div className="flex items-center justify-center gap-3 my-2">
@@ -325,7 +325,7 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
                     </div>
 
                     <p className="text-sm sm:text-base text-slate-600 italic font-serif mt-2 mb-3">
-                      Se otorga el presente reconocimiento con gozo y gratitud a:
+                      Se otorga con bendición, gozo y gratitud a:
                     </p>
 
                     {/* Partner Names Highlight */}
@@ -350,15 +350,15 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
                         Lecturas Totales
                       </span>
                       <span className="text-lg sm:text-xl font-black text-rose-600">
-                        {totalReadings}/60
+                        {totalReadings}/56
                       </span>
                     </div>
                     <div>
                       <span className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider block">
-                        Días Juntos
+                        Capítulos Juntos
                       </span>
                       <span className="text-lg sm:text-xl font-black text-amber-600">
-                        {synchronizedDays}/30
+                        {synchronizedDays}/28
                       </span>
                     </div>
                     <div>
@@ -374,10 +374,10 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
                   {/* Scripture Quote */}
                   <div className="my-4 p-3.5 sm:p-4 rounded-2xl bg-amber-50/80 border border-amber-200/90 max-w-xl mx-auto">
                     <p className="text-xs sm:text-sm font-serif italic text-amber-950">
-                      «Lámpara es a mis pies tu palabra, y lumbrera a mi camino.»
+                      «Y he aquí yo estoy con vosotros todos los días, hasta el fin del mundo. Amén.»
                     </p>
                     <span className="text-[11px] font-bold text-amber-800 uppercase tracking-wider mt-1 block">
-                      — Salmo 119:105
+                      — Mateo 28:20
                     </span>
                   </div>
 
@@ -412,24 +412,24 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
                     </div>
 
                     <div className="mt-4 text-[11px] text-slate-500">
-                      Otorgado el <span className="font-semibold text-slate-700">{completionDate}</span>
+                      Culminado el <span className="font-semibold text-slate-700">{completionDate}</span>
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* PAGE 2: 30 DAYS READING RECORD */}
+              {/* PAGE 2: 28 DAYS READING RECORD */}
               {showChecklist && (
                 <div className={`${showCertificate ? 'print-page-break' : ''} pt-2`}>
                   <div className="text-center pb-4 border-b border-slate-200 mb-6">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-50 text-rose-700 text-xs font-bold uppercase tracking-wider mb-1">
-                      <BookOpen className="w-3.5 h-3.5" /> Registro Completo
+                      <BookOpen className="w-3.5 h-3.5" /> Registro Consecutivo
                     </div>
                     <h2 className="text-2xl sm:text-3xl font-bold text-slate-800" style={{ fontFamily: 'Georgia, serif' }}>
-                      Las 30 Lecturas Bíblicas
+                      Los 28 Capítulos de Mateo
                     </h2>
                     <p className="text-xs sm:text-sm text-slate-500">
-                      Plan devocional compartido por {partnerNames.flor} y {partnerNames.tereque}
+                      Lectura devocional compartida por {partnerNames.flor} y {partnerNames.tereque}
                     </p>
                   </div>
 
@@ -454,13 +454,18 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
                                 key={day.num}
                                 className="flex items-center justify-between p-2 rounded-xl bg-white border border-slate-100 text-xs"
                               >
-                                <div className="flex items-center gap-2">
-                                  <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-[10px]">
+                                <div className="flex items-center gap-2 min-w-0 pr-2">
+                                  <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-[10px] flex-shrink-0">
                                     {day.num}
                                   </span>
-                                  <span className="font-medium text-slate-800">{day.reading}</span>
+                                  <div className="truncate">
+                                    <span className="font-medium text-slate-800 block truncate">{day.reading}</span>
+                                    {day.topic && (
+                                      <span className="text-[10px] text-slate-400 block truncate">{day.topic}</span>
+                                    )}
+                                  </div>
                                 </div>
-                                <div className="flex gap-3 items-center">
+                                <div className="flex gap-3 items-center flex-shrink-0">
                                   <span
                                     className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[10px] ${
                                       state.flor
@@ -498,10 +503,10 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
                       <Heart className="w-3.5 h-3.5 fill-purple-500" /> Diario Devocional de la Pareja
                     </div>
                     <h2 className="text-2xl sm:text-3xl font-bold text-slate-800" style={{ fontFamily: 'Georgia, serif' }}>
-                      Nuestras Reflexiones Escritas
+                      Nuestras Reflexiones de Mateo
                     </h2>
                     <p className="text-xs sm:text-sm text-slate-500">
-                      Pensamientos, oraciones y testimonios guardados durante los 30 días
+                      Pensamientos, oraciones y testimonios guardados durante los 28 capítulos
                     </p>
                   </div>
 
@@ -571,10 +576,10 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
                   {/* Final Closing Blessing */}
                   <div className="print-avoid-break mt-8 p-6 text-center bg-gradient-to-r from-rose-50 via-amber-50 to-sky-50 rounded-2xl border border-rose-200">
                     <p className="font-serif italic text-sm sm:text-base text-slate-800">
-                      «El Señor te bendiga y te guarde; el Señor haga resplandecer su rostro sobre ti y tenga de ti misericordia; el Señor alce sobre ti su rostro y ponga en ti paz.»
+                      «Lámpara es a mis pies tu palabra, y lumbrera a mi camino.»
                     </p>
                     <span className="text-xs font-bold text-slate-600 block mt-2">
-                      — Números 6:24-26
+                      — Salmo 119:105
                     </span>
                   </div>
                 </div>
@@ -585,7 +590,7 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
           {/* Footer toolbar (No print) */}
           <div className="p-4 bg-white border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 no-print">
             <p className="text-xs text-slate-500">
-              💡 <strong>Consejo:</strong> En el menú de impresión, seleccioná <em>"Guardar como PDF"</em> o tu impresora a color con <em>"Gráficos de fondo"</em> activado.
+              💡 <strong>Consejo:</strong> En el menú de impresión, seleccioná <em>"Guardar como PDF"</em> con <em>"Gráficos de fondo"</em> activado.
             </p>
             <div className="flex items-center gap-2">
               <button

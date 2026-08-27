@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { BookOpen, ExternalLink, X, Heart, Sparkles } from 'lucide-react';
+import { BookOpen, ExternalLink, X, Sparkles, Heart } from 'lucide-react';
 import { DayItem } from '../types';
 
 interface BiblePassageModalProps {
@@ -23,7 +23,7 @@ export const BiblePassageModal: React.FC<BiblePassageModalProps> = ({ day, onClo
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="fixed inset-0 bg-slate-900/30 backdrop-blur-sm"
+          className="fixed inset-0 bg-slate-900/30 backdrop-blur-xs"
         />
 
         <motion.div
@@ -33,13 +33,13 @@ export const BiblePassageModal: React.FC<BiblePassageModalProps> = ({ day, onClo
           className="relative z-10 w-full max-w-lg bg-white rounded-3xl p-6 shadow-2xl border border-slate-200 text-left overflow-hidden"
         >
           <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-            <div className="flex items-center gap-2.5">
-              <div className="w-10 h-10 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center font-bold">
-                <BookOpen className="w-5 h-5" />
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center font-bold shadow-xs">
+                <BookOpen className="w-6 h-6" />
               </div>
               <div>
                 <span className="text-xs font-bold text-rose-600 uppercase tracking-wider">
-                  Día {day.num} de 30
+                  Día {day.num} de 28 · Evangelio de Mateo
                 </span>
                 <h3 className="text-xl font-bold text-slate-800" style={{ fontFamily: 'Georgia, serif' }}>
                   {day.reading}
@@ -56,19 +56,35 @@ export const BiblePassageModal: React.FC<BiblePassageModalProps> = ({ day, onClo
           </div>
 
           <div className="py-5 space-y-4">
-            <div className="p-4 rounded-2xl bg-[#FFFBF7] border border-amber-100/80 text-sm text-slate-700 leading-relaxed">
-              <p className="font-semibold text-slate-800 mb-1 flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-amber-500" /> Guía para tu lectura:
+            {day.topic && (
+              <div className="p-3.5 rounded-2xl bg-rose-50/70 border border-rose-200 text-rose-950">
+                <p className="text-xs font-bold text-rose-700 uppercase tracking-wider mb-1">
+                  Tema Central:
+                </p>
+                <p className="font-semibold text-sm text-slate-800">
+                  {day.topic}
+                </p>
+                {day.summary && (
+                  <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                    {day.summary}
+                  </p>
+                )}
+              </div>
+            )}
+
+            <div className="p-4 rounded-2xl bg-[#FFFBF7] border border-amber-100 text-xs sm:text-sm text-slate-700 leading-relaxed">
+              <p className="font-bold text-slate-800 mb-1 flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-amber-500" /> Guía para tu lectura en pareja:
               </p>
               <p>
-                Antes de comenzar a leer <strong>{day.reading}</strong>, toma un momento para respirar hondo, 
-                hacer una oración en silencio y buscar la enseñanza que Dios tiene para vos y tu pareja en este pasaje.
+                Antes de comenzar a leer <strong>{day.reading}</strong>, tomen un momento de oración juntos: 
+                pidan a Jesús que abra sus corazones a la verdad de Su Evangelio y anoten en su reflexión lo que más les hable.
               </p>
             </div>
 
             <div className="space-y-2">
               <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                Abrir pasaje en línea (Reina-Valera 1960 / NVI):
+                Leer capítulo completo en línea:
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 <a
@@ -101,9 +117,9 @@ export const BiblePassageModal: React.FC<BiblePassageModalProps> = ({ day, onClo
           <div className="pt-3 border-t border-slate-100 flex justify-end">
             <button
               onClick={onClose}
-              className="px-5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-sm transition-colors"
+              className="px-5 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-medium text-sm transition-colors cursor-pointer"
             >
-              Listo
+              Cerrar
             </button>
           </div>
         </motion.div>

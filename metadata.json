@@ -1,6 +1,6 @@
 {
-  "name": "Desafío Bíblico de 30 Días",
-  "description": "Plan devocional y de lectura bíblica de 30 días con seguimiento de progreso compartido y reflexiones.",
+  "name": "Desafío Bíblico: El Evangelio de Mateo",
+  "description": "Plan devocional y de lectura bíblica consecutiva de los 28 capítulos del Evangelio de Mateo para parejas con seguimiento de progreso y reflexiones.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

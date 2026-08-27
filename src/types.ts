@@ -1,6 +1,8 @@
 export interface DayItem {
   num: number;
   reading: string;
+  topic?: string;
+  summary?: string;
 }
 
 export interface WeekTheme {
