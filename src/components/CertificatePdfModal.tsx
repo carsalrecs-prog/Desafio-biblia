@@ -9,10 +9,7 @@ import {
   Award,
   BookOpen,
   Calendar,
-  CheckCircle2,
   Loader2,
-  Layers,
-  FileCheck,
   Flame,
 } from 'lucide-react';
 import jsPDF from 'jspdf';
@@ -46,7 +43,7 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
     });
   });
   const [customDedication, setCustomDedication] = useState(
-    'Por haber caminado juntos a través de los 28 capítulos del Santo Evangelio de Mateo, fortaleciendo su fe, su amor y su devoción mutua a los pies de Jesús.'
+    'Por haber caminado juntos a través de los 28 capítulos del Santo Evangelio de Mateo (2 capítulos por día), fortaleciendo su fe, su amor y su devoción mutua a los pies de Jesús.'
   );
   const [activeTab, setActiveTab] = useState<'all' | 'certificate' | 'checklist' | 'reflections'>('all');
 
@@ -54,12 +51,13 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
 
   if (!isOpen) return null;
 
-  // Calculate statistics for all 28 chapters
+  // Calculate statistics for the 14 days (28 chapters)
+  const totalDays = 14;
   let totalFlor = 0;
   let totalTereque = 0;
   let synchronizedDays = 0;
 
-  for (let i = 1; i <= 28; i++) {
+  for (let i = 1; i <= totalDays; i++) {
     const d = checkedDays[i];
     if (d?.flor) totalFlor++;
     if (d?.tereque) totalTereque++;
@@ -67,7 +65,7 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
   }
 
   const totalReadings = totalFlor + totalTereque;
-  const progressPercent = Math.round((totalReadings / 56) * 100);
+  const progressPercent = Math.round((totalReadings / (totalDays * 2)) * 100);
 
   // Download PDF handler using html2canvas & jsPDF
   const handleDownloadPDF = async () => {
@@ -123,7 +121,7 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
           ? 'Reflexiones'
           : 'Album_Completo';
 
-      const fileName = `Desafio_Mateo_${modeName}_${partnerNames.flor}_y_${partnerNames.tereque}.pdf`
+      const fileName = `Desafio_Mateo_2CapsDia_${modeName}_${partnerNames.flor}_y_${partnerNames.tereque}.pdf`
         .replace(/\s+/g, '_');
       pdf.save(fileName);
     } catch (error) {
@@ -173,7 +171,7 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
                   <Sparkles className="w-4 h-4 text-amber-500" />
                 </h2>
                 <p className="text-xs text-slate-500">
-                  Imprimí o descargá en PDF el certificado de los 28 capítulos y sus reflexiones
+                  Plan de 2 capítulos diarios · 28 capítulos en 14 días con reflexiones
                 </p>
               </div>
             </div>
@@ -222,7 +220,7 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
             <div className="flex items-center gap-2 sm:gap-4 flex-wrap">
               <div className="flex items-center gap-1.5">
                 <Calendar className="w-3.5 h-3.5 text-slate-500" />
-                <span className="font-semibold text-slate-600">Fecha de entrega:</span>
+                <span className="font-semibold text-slate-600">Fecha:</span>
                 <input
                   type="text"
                   value={completionDate}
@@ -268,7 +266,7 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                28 Capítulos
+                14 Días (28 Caps)
               </button>
               <button
                 onClick={() => setActiveTab('reflections')}
@@ -347,18 +345,18 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
                   <div className="grid grid-cols-3 gap-2 sm:gap-4 max-w-md mx-auto my-4 p-3 bg-white/95 rounded-2xl border border-amber-200/80 shadow-xs text-center">
                     <div>
                       <span className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider block">
-                        Lecturas Totales
+                        Días Leídos
                       </span>
                       <span className="text-lg sm:text-xl font-black text-rose-600">
-                        {totalReadings}/56
+                        {totalReadings}/28
                       </span>
                     </div>
                     <div>
                       <span className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider block">
-                        Capítulos Juntos
+                        Días Juntos
                       </span>
                       <span className="text-lg sm:text-xl font-black text-amber-600">
-                        {synchronizedDays}/28
+                        {synchronizedDays}/14
                       </span>
                     </div>
                     <div>
@@ -418,12 +416,12 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
                 </div>
               )}
 
-              {/* PAGE 2: 28 DAYS READING RECORD */}
+              {/* PAGE 2: 14 DAYS READING RECORD (28 CHAPTERS) */}
               {showChecklist && (
                 <div className={`${showCertificate ? 'print-page-break' : ''} pt-2`}>
                   <div className="text-center pb-4 border-b border-slate-200 mb-6">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-50 text-rose-700 text-xs font-bold uppercase tracking-wider mb-1">
-                      <BookOpen className="w-3.5 h-3.5" /> Registro Consecutivo
+                      <BookOpen className="w-3.5 h-3.5" /> Plan Consecutivo de 14 Días (2 Caps/Día)
                     </div>
                     <h2 className="text-2xl sm:text-3xl font-bold text-slate-800" style={{ fontFamily: 'Georgia, serif' }}>
                       Los 28 Capítulos de Mateo
@@ -455,11 +453,11 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
                                 className="flex items-center justify-between p-2 rounded-xl bg-white border border-slate-100 text-xs"
                               >
                                 <div className="flex items-center gap-2 min-w-0 pr-2">
-                                  <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-[10px] flex-shrink-0">
+                                  <span className="w-6 h-6 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-[11px] flex-shrink-0">
                                     {day.num}
                                   </span>
                                   <div className="truncate">
-                                    <span className="font-medium text-slate-800 block truncate">{day.reading}</span>
+                                    <span className="font-semibold text-slate-800 block truncate">{day.reading}</span>
                                     {day.topic && (
                                       <span className="text-[10px] text-slate-400 block truncate">{day.topic}</span>
                                     )}
@@ -506,7 +504,7 @@ export const CertificatePdfModal: React.FC<CertificatePdfModalProps> = ({
                       Nuestras Reflexiones de Mateo
                     </h2>
                     <p className="text-xs sm:text-sm text-slate-500">
-                      Pensamientos, oraciones y testimonios guardados durante los 28 capítulos
+                      Pensamientos, oraciones y testimonios guardados durante los 14 días
                     </p>
                   </div>
 

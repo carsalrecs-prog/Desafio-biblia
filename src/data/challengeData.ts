@@ -3,8 +3,8 @@ import { WeekChallenge } from '../types';
 export const challengeData: WeekChallenge[] = [
   {
     week: 1,
-    title: "El Comienzo y el Sermón del Monte",
-    subtitle: "El nacimiento de Jesús, su bautismo, victoria y las enseñanzas del Reino.",
+    title: "El Reino Revelado: Enseñanza y Poder",
+    subtitle: "Días 1 al 7 (Capítulos 1 al 14) · Desde la genealogía de Jesús y el Sermón del Monte hasta sus grandes milagros y parábolas.",
     theme: {
       bg: "bg-rose-50/70",
       border: "border-rose-200",
@@ -17,183 +17,57 @@ export const challengeData: WeekChallenge[] = [
     days: [
       {
         num: 1,
-        reading: "Mateo 1",
-        topic: "Genealogía y Nacimiento de Jesucristo",
-        summary: "Dios cumple sus promesas a través de las generaciones y nos da a Emanuel: «Dios con nosotros»."
+        reading: "Mateo 1 - 2",
+        topic: "Nacimiento de Jesús y la Adoración de los Sabios",
+        summary: "Cap. 1: La genealogía y cumplimiento de las profecías con Emanuel («Dios con nosotros»). Cap. 2: La estrella de Belén, los sabios adoradores y la providencia de Dios guardando al Niño."
       },
       {
         num: 2,
-        reading: "Mateo 2",
-        topic: "Los Reyes Magos y la Protección Divina",
-        summary: "La adoración de los sabios de oriente y la fiel guía de Dios guardando a la sagrada familia."
+        reading: "Mateo 3 - 4",
+        topic: "Bautismo de Jesús y Victoria en la Tentación",
+        summary: "Cap. 3: Juan el Bautista y la voz del Padre: «Este es mi Hijo amado». Cap. 4: Jesús vence al tentador con la Palabra («Escrito está») y llama a sus primeros discípulos pescadores de hombres."
       },
       {
         num: 3,
-        reading: "Mateo 3",
-        topic: "Juan el Bautista y el Bautismo de Jesús",
-        summary: "«Este es mi Hijo amado, en quien tengo complacencia». Comienza el ministerio terrenal."
+        reading: "Mateo 5 - 6",
+        topic: "Sermón del Monte: Bienaventuranzas y Padre Nuestro",
+        summary: "Cap. 5: Bienaventurados, sal de la tierra, luz del mundo y amor al prójimo. Cap. 6: Cómo orar con el Padre Nuestro, ayuno sincero, no afanarse por el mañana y buscar primeramente el Reino."
       },
       {
         num: 4,
-        reading: "Mateo 4",
-        topic: "Victoria en la Tentación y Primeros Discípulos",
-        summary: "Vencer con la Palabra de Dios («Escrito está») y el llamado: «Síganme, y los haré pescadores de hombres»."
+        reading: "Mateo 7 - 8",
+        topic: "Los Dos Cimientos y Autoridad sobre la Tempestad",
+        summary: "Cap. 7: Edificar sobre la Roca firme y pedir con fe («Pedid, y se os dará»). Cap. 8: Sanidad del leproso y del siervo del centurión, y el poder de Jesús calmando la tormenta en el mar."
       },
       {
         num: 5,
-        reading: "Mateo 5",
-        topic: "El Sermón del Monte: Bienaventuranzas, Sal y Luz",
-        summary: "El corazón del Evangelio: ser bienaventurados, pacificadores, y ser luz que ilumine a todos."
+        reading: "Mateo 9 - 10",
+        topic: "Llamado de Mateo y la Misión de los Doce Apóstoles",
+        summary: "Cap. 9: Perdón de pecados, fe de la mujer que tocó su manto y compasión por la mies. Cap. 10: Envío y valentía apostólica («Aun los cabellos de vuestra cabeza están todos contados»)."
       },
       {
         num: 6,
-        reading: "Mateo 6",
-        topic: "El Padre Nuestro, la Confianza y las Riquezas",
-        summary: "Aprender a orar, no afanarnos por el mañana y buscar primeramente el Reino de Dios."
+        reading: "Mateo 11 - 12",
+        topic: "Descanso en Cristo y Señor del Día de Reposo",
+        summary: "Cap. 11: La dulce invitación: «Venid a mí todos los que estáis trabajados y cargados». Cap. 12: Misericordia sobre sacrificios, y de la abundancia del corazón habla la boca."
       },
       {
         num: 7,
-        reading: "Mateo 7",
-        topic: "La Regla de Oro, Pedir con Fe y los Dos Cimientos",
-        summary: "Construir nuestra vida y hogar sobre la Roca firme de las palabras de Cristo."
+        reading: "Mateo 13 - 14",
+        topic: "Parábolas del Reino y Caminar sobre las Aguas",
+        summary: "Cap. 13: La semilla del sembrador, la perla preciosa y el tesoro escondido. Cap. 14: Multiplicación de los cinco panes y dos peces, y Jesús caminando sobre el mar tempestuoso."
       }
     ],
     reflections: [
-      "¿Qué aspecto del carácter y las palabras de Jesús en estos primeros 7 capítulos tocó más mi corazón?",
-      "¿Cómo podemos construir nuestro día a día sobre la Roca firme de sus enseñanzas?",
-      "¿En qué área de nuestra vida necesitamos soltar el afán y confiar plenamente en el Padre?"
+      "¿Qué enseñanza de Jesús en estos primeros 14 capítulos iluminó más nuestra vida y nuestra relación?",
+      "Al leer el Sermón del Monte (Mateo 5-7), ¿cómo podemos edificar nuestro hogar y decisiones sobre la Roca firme?",
+      "¿En qué área necesitamos entregarnos a Su descanso y confiar en que Él calma cualquier tormenta?"
     ]
   },
   {
     week: 2,
-    title: "Milagros, Autoridad y Parábolas del Reino",
-    subtitle: "El poder sanador de Jesús, el llamado a los discípulos y los misterios del Reino.",
-    theme: {
-      bg: "bg-purple-50/70",
-      border: "border-purple-200",
-      text: "text-purple-900",
-      lightText: "text-purple-700",
-      accentBg: "bg-purple-500",
-      circleUnchecked: "bg-purple-200 text-purple-800 hover:bg-purple-300",
-      circleChecked: "bg-purple-500 text-white shadow-inner shadow-purple-700/50"
-    },
-    days: [
-      {
-        num: 8,
-        reading: "Mateo 8",
-        topic: "Sanidades de Fe y la Tempestad Calmada",
-        summary: "«¿Por qué teméis, hombres de poca fe?» Jesús tiene toda autoridad sobre la enfermedad y el viento."
-      },
-      {
-        num: 9,
-        reading: "Mateo 9",
-        topic: "El Llamado de Mateo y la Compasión de Jesús",
-        summary: "Jesús sana, perdona y mira a las multitudes con profunda compasión: «La mies es mucha, mas los obreros pocos»."
-      },
-      {
-        num: 10,
-        reading: "Mateo 10",
-        topic: "El Envío de los Doce Apóstoles",
-        summary: "Instrucciones de valentía y fidelidad: «No temáis... hasta los cabellos de vuestra cabeza están todos contados»."
-      },
-      {
-        num: 11,
-        reading: "Mateo 11",
-        topic: "Descanso para los Trabajados y Cargados",
-        summary: "La dulce invitación de Jesús: «Venid a mí todos los que estáis trabajados y cargados, y yo os haré descansar»."
-      },
-      {
-        num: 12,
-        reading: "Mateo 12",
-        topic: "Señor del Día de Reposo y el Árbol por su Fruto",
-        summary: "La misericordia por encima del legalismo y cómo de la abundancia del corazón habla la boca."
-      },
-      {
-        num: 13,
-        reading: "Mateo 13",
-        topic: "Las Parábolas del Sembrador y el Tesoro Escondido",
-        summary: "Cuidar la semilla de la Palabra en buena tierra para que dé fruto al ciento por uno."
-      },
-      {
-        num: 14,
-        reading: "Mateo 14",
-        topic: "Multiplicación de los Panes y Caminar sobre el Mar",
-        summary: "«Ten fe, no temas»: Jesús sustenta nuestras necesidades y nos sostiene cuando el agua parece profunda."
-      }
-    ],
-    reflections: [
-      "¿En qué momentos de nuestra vida hemos experimentado que Jesús calma nuestras tormentas?",
-      "¿Cómo podemos acudir a Él para recibir el verdadero descanso cuando estamos cansados?",
-      "¿Qué tipo de tierra está siendo nuestro corazón para recibir y cuidar Su Palabra?"
-    ]
-  },
-  {
-    week: 3,
-    title: "Enseñanzas, el Matrimonio y la Gloria de Dios",
-    subtitle: "La pureza interior, el poder del perdón, el pacto matrimonial y la entrada triunfal.",
-    theme: {
-      bg: "bg-emerald-50/70",
-      border: "border-emerald-200",
-      text: "text-emerald-900",
-      lightText: "text-emerald-700",
-      accentBg: "bg-emerald-500",
-      circleUnchecked: "bg-emerald-200 text-emerald-800 hover:bg-emerald-300",
-      circleChecked: "bg-emerald-500 text-white shadow-inner shadow-emerald-700/50"
-    },
-    days: [
-      {
-        num: 15,
-        reading: "Mateo 15",
-        topic: "La Pureza del Corazón y la Fe Inquebrantable",
-        summary: "Lo que sale del corazón es lo que importa; y la maravillosa fe perseverante de la mujer cananea."
-      },
-      {
-        num: 16,
-        reading: "Mateo 16",
-        topic: "La Confesión de Pedro y Tomar Nuestra Cruz",
-        summary: "«Tú eres el Cristo, el Hijo del Dios viviente». El valor de seguir a Jesús de todo corazón."
-      },
-      {
-        num: 17,
-        reading: "Mateo 17",
-        topic: "La Transfiguración y la Fe como Grano de Mostaza",
-        summary: "La gloria celestial revelada y la promesa de que nada será imposible si tenemos fe genuina."
-      },
-      {
-        num: 18,
-        reading: "Mateo 18",
-        topic: "Humildad, Grandeza y el Perdón sin Límites",
-        summary: "Ser como niños, buscar a la oveja perdida y perdonar hasta setenta veces siete."
-      },
-      {
-        num: 19,
-        reading: "Mateo 19",
-        topic: "El Sagrado Pacto del Matrimonio y los Niños",
-        summary: "«Lo que Dios unió, no lo separe el hombre». Bendición a los niños y poner a Dios antes que cualquier riqueza."
-      },
-      {
-        num: 20,
-        reading: "Mateo 20",
-        topic: "La Gracia en la Viña y la Grandeza en el Servir",
-        summary: "«El Hijo del Hombre no vino para ser servido, sino para servir». La verdadera grandeza está en el amor al otro."
-      },
-      {
-        num: 21,
-        reading: "Mateo 21",
-        topic: "Entrada Triunfal en Jerusalén y la Oración con Fe",
-        summary: "«¡Hosanna al Hijo de David!» y la promesa: «Todo lo que pidiereis en oración, creyendo, lo recibiréis»."
-      }
-    ],
-    reflections: [
-      "¿Qué nos enseña Mateo 19 sobre cuidar, valorar y bendecir nuestra unión delante de Dios?",
-      "¿Cómo podemos ejercitar activamente el perdón mutuo (setenta veces siete) en nuestra relación?",
-      "¿Cómo podemos servirnos el uno al otro con la misma humildad y ternura de Jesús?"
-    ]
-  },
-  {
-    week: 4,
-    title: "El Gran Mandamiento, la Cruz y la Resurrección",
-    subtitle: "El amor supremo, la fidelidad final, el sacrificio en la cruz y la victoria eterna.",
+    title: "Amor Supremo, la Cruz y la Resurrección",
+    subtitle: "Días 8 al 14 (Capítulos 15 al 28) · El pacto del matrimonio, el perdón, la entrega en la cruz y la gloriosa resurrección con la Gran Comisión.",
     theme: {
       bg: "bg-amber-50/70",
       border: "border-amber-200",
@@ -205,66 +79,66 @@ export const challengeData: WeekChallenge[] = [
     },
     days: [
       {
-        num: 22,
-        reading: "Mateo 22",
-        topic: "La Fiesta de Bodas y el Gran Mandamiento",
-        summary: "«Amarás al Señor tu Dios con todo tu corazón, con toda tu alma y con toda tu mente; y a tu prójimo como a ti mismo»."
+        num: 8,
+        reading: "Mateo 15 - 16",
+        topic: "Pureza del Corazón y la Gran Confesión de Fe",
+        summary: "Cap. 15: Lo que sale del corazón es lo que cuenta; la perseverante fe de la mujer cananea. Cap. 16: Pedro declara: «Tú eres el Cristo, el Hijo del Dios viviente» y el llamado a tomar nuestra cruz."
       },
       {
-        num: 23,
-        reading: "Mateo 23",
-        topic: "Sinceridad de Vida y el Amor por Su Pueblo",
-        summary: "Jesús valora la autenticidad, la justicia, la misericordia y la fe por encima de las apariencias."
+        num: 9,
+        reading: "Mateo 17 - 18",
+        topic: "La Transfiguración y el Perdón sin Límites",
+        summary: "Cap. 17: La gloria de Jesús en el monte santo y fe como grano de mostaza. Cap. 18: La grandeza de la humildad, la oveja perdida y la gracia de perdonar hasta setenta veces siete."
       },
       {
-        num: 24,
-        reading: "Mateo 24",
-        topic: "Permanecer Firmes, Velar y Confiar en Su Promesa",
-        summary: "«El cielo y la tierra pasarán, pero mis palabras no pasarán». Estar siempre preparados y firmes en la fe."
+        num: 10,
+        reading: "Mateo 19 - 20",
+        topic: "El Sagrado Matrimonio y Grandeza en el Servicio",
+        summary: "Cap. 19: «Lo que Dios unió, no lo separe el hombre», bendición a los niños. Cap. 20: Los obreros de la viña y el principio supremo: «El que quiera ser el primero, sea vuestro servidor»."
       },
       {
-        num: 25,
-        reading: "Mateo 25",
-        topic: "Las Diez Vírgenes, los Talentos y el Amor en Acción",
-        summary: "Mantener la lámpara encendida, multiplicar los dones que Dios nos dio y servir al necesitado."
+        num: 11,
+        reading: "Mateo 21 - 22",
+        topic: "Entrada Triunfal y el Gran Mandamiento",
+        summary: "Cap. 21: ¡Hosanna al Hijo de David! y el poder de la oración con fe. Cap. 22: La parábola de la fiesta de bodas y los dos grandes mandamientos: amar a Dios con todo el ser y al prójimo como a uno mismo."
       },
       {
-        num: 26,
-        reading: "Mateo 26",
-        topic: "La Santa Cena, Getsemaní y la Entrega de Jesús",
-        summary: "El nuevo pacto en su sangre, la oración profunda («No se haga mi voluntad, sino la tuya») y su infinito amor."
+        num: 12,
+        reading: "Mateo 23 - 24",
+        topic: "Autenticidad de Fe y Velar con Esperanza",
+        summary: "Cap. 23: La humildad frente a la hipocresía y el amor de Dios por su pueblo. Cap. 24: Las señales de los tiempos, la fidelidad perseverante y la promesa: «Mis palabras no pasarán»."
       },
       {
-        num: 27,
-        reading: "Mateo 27",
-        topic: "La Pasión, la Cruz del Calvario y la Sepultura",
-        summary: "Jesús entrega su vida voluntariamente por amor y perdón de todos nuestros pecados. El velo se rasgó."
+        num: 13,
+        reading: "Mateo 25 - 26",
+        topic: "Lámparas Encendidas, Santa Cena y Getsemaní",
+        summary: "Cap. 25: Las diez vírgenes, los talentos multiplicados y el servicio con amor. Cap. 26: La unción en Betania, la institución de la Santa Cena, la oración en Getsemaní y la entrega voluntaria de Jesús."
       },
       {
-        num: 28,
-        reading: "Mateo 28",
-        topic: "¡La Resurrección Victoriosa y la Gran Comisión!",
-        summary: "«¡No está aquí, pues ha resucitado!» y su promesa eterna: «He aquí yo estoy con vosotros todos los días, hasta el fin del mundo»."
+        num: 14,
+        reading: "Mateo 27 - 28",
+        topic: "La Cruz del Calvario, ¡Resurrección y la Gran Comisión!",
+        summary: "Cap. 27: El sacrificio redentor en la cruz por amor y el sepulcro sellado. Cap. 28: ¡El sepulcro vacío! «¡Ha resucitado!» y la gloriosa promesa: «He aquí yo estoy con vosotros todos los días, hasta el fin del mundo»."
       }
     ],
     reflections: [
-      "Al contemplar la entrega y resurrección de Jesús en los capítulos 26 al 28, ¿qué brota en tu corazón hacia Él?",
-      "¿Cómo nos llena de paz saber que Él prometió estar con nosotros todos los días hasta el fin del mundo?",
-      "¿Qué compromiso o fruto especial queremos mantener juntos ahora que culminamos todo el Evangelio de Mateo?"
+      "¿Qué nos enseña Mateo 19 sobre cuidar, santificar y bendecir nuestra unión como pareja delante de Dios?",
+      "Al contemplar la entrega de Jesús en la cruz y su triunfo en la resurrección, ¿qué gozo y compromiso renueva en nosotros?",
+      "¿Cómo nos fortalece su promesa final: «He aquí yo estoy con vosotros todos los días, hasta el fin del mundo»?"
     ]
   }
 ];
 
 export const devotionalTips = [
   {
-    title: "Tip diario para Mateo",
-    prayer: "Señor Jesús, abre mis ojos para contemplar tus obras y comprender tus enseñanzas en este capítulo de Mateo.",
-    description: "Leé con calma el capítulo de hoy y subrayá el versículo que más te hable al corazón."
+    title: "Ritmo de 2 capítulos por día",
+    prayer: "Señor Jesús, concédenos sabiduría, constancia y amor para meditar en tus dos capítulos de hoy.",
+    description: "Lean un capítulo cada uno en voz alta o compartan juntos los versículos que más tocaron su corazón."
   },
   {
     title: "Diálogo en pareja",
     prayer: "Dios, bendice nuestro amor y ayúdanos a caminar juntos guiados por la luz de tu Evangelio.",
-    description: "Compartan brevemente al final del día qué les enseñó Jesús en este capítulo."
+    description: "Compartan brevemente al final del día qué les enseñó Jesús en la lectura de hoy."
   },
   {
     title: "Oración de victoria",

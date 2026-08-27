@@ -24,19 +24,19 @@ export const ShareNotesModal: React.FC<ShareNotesModalProps> = ({
 
   if (!isOpen) return null;
 
-  // Generate summary text for 28 chapters of Mateo
+  // Generate summary text for 14 days (28 chapters of Mateo, 2 chapters/day)
   let totalFlor = 0;
   let totalTereque = 0;
-  for (let i = 1; i <= 28; i++) {
+  for (let i = 1; i <= 14; i++) {
     const day = checkedDays[i];
     if (day?.flor) totalFlor++;
     if (day?.tereque) totalTereque++;
   }
 
-  let reportText = `📖 *Desafío Bíblico: El Evangelio de Mateo (28 Capítulos)*\n`;
-  reportText += `💖 Progreso de ${partnerNames.flor}: ${totalFlor}/28 capítulos\n`;
-  reportText += `✨ Progreso de ${partnerNames.tereque}: ${totalTereque}/28 capítulos\n`;
-  reportText += `🎯 Progreso conjunto: ${totalFlor + totalTereque}/56 lecturas (${Math.round(((totalFlor + totalTereque) / 56) * 100)}%)\n\n`;
+  let reportText = `📖 *Desafío Bíblico: El Evangelio de Mateo (28 Capítulos · 2 por día)*\n`;
+  reportText += `💖 Progreso de ${partnerNames.flor}: ${totalFlor}/14 días completados (${totalFlor * 2} caps)\n`;
+  reportText += `✨ Progreso de ${partnerNames.tereque}: ${totalTereque}/14 días completados (${totalTereque * 2} caps)\n`;
+  reportText += `🎯 Días sincronizados: ${totalFlor + totalTereque}/28 lecturas (${Math.round(((totalFlor + totalTereque) / 28) * 100)}%)\n\n`;
 
   challengeData.forEach((section, idx) => {
     const secTitle = typeof section.week === 'number' ? `Semana ${section.week}: ${section.title}` : `${section.week}: ${section.title}`;
@@ -90,7 +90,7 @@ export const ShareNotesModal: React.FC<ShareNotesModalProps> = ({
               </div>
               <div>
                 <span className="text-xs font-bold text-sky-600 uppercase tracking-wider">
-                  Resumen de Mateo
+                  Resumen de Mateo (2 Caps/Día)
                 </span>
                 <h3 className="text-lg font-bold text-slate-800">
                   Exportar Reflexiones

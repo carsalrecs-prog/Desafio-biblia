@@ -193,7 +193,7 @@ export default function App() {
   const handleResetProgress = () => {
     if (
       window.confirm(
-        '¿Estás seguro de que deseas reiniciar los checks de los 28 capítulos? (Tus reflexiones escritas NO se borrarán)'
+        '¿Estás seguro de que deseas reiniciar los checks de los 14 días (28 capítulos)? (Tus reflexiones escritas NO se borrarán)'
       )
     ) {
       const emptyState = {};
@@ -207,12 +207,13 @@ export default function App() {
     }
   };
 
-  // Calculations for all 28 consecutive chapters of Matthew
+  // Calculations for 14 days (28 consecutive chapters of Matthew at 2 chapters/day)
+  const totalDays = 14;
   let completedFlor = 0;
   let completedTereque = 0;
   let completedBothDays = 0;
 
-  for (let i = 1; i <= 28; i++) {
+  for (let i = 1; i <= totalDays; i++) {
     const dayState = checkedDays[i];
     if (dayState?.flor) completedFlor++;
     if (dayState?.tereque) completedTereque++;
@@ -220,7 +221,7 @@ export default function App() {
   }
 
   const totalCompleted = completedFlor + completedTereque;
-  const progressPercent = Math.round((totalCompleted / 56) * 100);
+  const progressPercent = Math.round((totalCompleted / (totalDays * 2)) * 100);
   const isFullyCompleted = progressPercent === 100;
 
   // Filtered sections
@@ -237,10 +238,10 @@ export default function App() {
         <header className="pt-8 pb-4 px-4 max-w-5xl mx-auto text-center relative">
           <div className="hidden md:flex absolute top-6 right-4 bg-gradient-to-r from-rose-100 to-rose-50 text-rose-800 px-4 py-2.5 rounded-2xl shadow-xs border border-rose-200/80 transform rotate-2 flex-col items-center justify-center">
             <span className="font-bold text-[10px] uppercase tracking-wider text-rose-500">
-              Lema Devocional
+              Ritmo Diario
             </span>
-            <span className="font-bold text-xs leading-tight">Cada día, un paso más</span>
-            <span className="font-bold text-xs leading-tight">cerca de Él</span>
+            <span className="font-bold text-xs leading-tight">2 capítulos por día</span>
+            <span className="font-bold text-xs leading-tight">en pareja</span>
             <Heart className="w-3.5 h-3.5 mt-1 text-rose-500 fill-rose-500" />
           </div>
 
@@ -251,7 +252,7 @@ export default function App() {
             </div>
             <div className="text-left">
               <span className="text-xs sm:text-sm font-bold uppercase tracking-widest text-rose-600 block">
-                Evangelio Completo · 28 Capítulos Consecutivos
+                28 Capítulos de Mateo · 2 Capítulos al Día
               </span>
               <h1
                 className="text-3xl sm:text-5xl md:text-6xl font-black text-[#1a2f4c] tracking-tight leading-none"
@@ -267,12 +268,12 @@ export default function App() {
             style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
           >
             <Heart className="w-4 h-4 sm:w-6 sm:h-6 fill-rose-400 text-rose-400" />
-            <span>Capítulo a capítulo en pareja</span>
+            <span>2 capítulos por día en pareja</span>
             <Heart className="w-4 h-4 sm:w-6 sm:h-6 fill-rose-400 text-rose-400" />
           </div>
 
           <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto bg-white/80 backdrop-blur-xs py-1.5 px-5 rounded-full shadow-xs border border-slate-200 inline-flex items-center gap-2">
-            <span>28 días para conocer y seguir a Jesús a través de su Evangelio</span>
+            <span>14 días para completar todo el Evangelio de Mateo juntos</span>
             <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
           </p>
 
@@ -322,10 +323,10 @@ export default function App() {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3">
               <div>
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block text-left">
-                  Progreso Conjunto (Mateo 1 al 28)
+                  Progreso Conjunto (Mateo 1 al 28 · 14 Días)
                 </span>
                 <span className="text-base sm:text-lg font-bold text-slate-800">
-                  {totalCompleted} de 56 lecturas completadas
+                  {totalCompleted} de 28 lecturas completadas ({completedFlor + completedTereque > 0 ? (completedFlor + completedTereque) : 0} / 28)
                 </span>
               </div>
               <div className="flex items-center gap-2 self-end sm:self-center">
@@ -349,10 +350,10 @@ export default function App() {
                   <span className="truncate">{partnerNames.flor}</span>
                 </div>
                 <span className="text-lg font-black text-rose-900 mt-0.5 block">
-                  {completedFlor}/28
+                  {completedFlor}/14
                 </span>
                 <span className="text-[11px] text-rose-700 font-medium">
-                  {Math.round((completedFlor / 28) * 100)}%
+                  {completedFlor * 2} caps ({Math.round((completedFlor / 14) * 100)}%)
                 </span>
               </div>
 
@@ -362,7 +363,7 @@ export default function App() {
                   <span>Días Juntos</span>
                 </div>
                 <span className="text-lg font-black text-amber-900 mt-0.5 block">
-                  {completedBothDays}/28
+                  {completedBothDays}/14
                 </span>
                 <span className="text-[11px] text-amber-700 font-medium">
                   Sincronizados
@@ -375,10 +376,10 @@ export default function App() {
                   <span className="truncate">{partnerNames.tereque}</span>
                 </div>
                 <span className="text-lg font-black text-sky-900 mt-0.5 block">
-                  {completedTereque}/28
+                  {completedTereque}/14
                 </span>
                 <span className="text-[11px] text-sky-700 font-medium">
-                  {Math.round((completedTereque / 28) * 100)}%
+                  {completedTereque * 2} caps ({Math.round((completedTereque / 14) * 100)}%)
                 </span>
               </div>
             </div>
@@ -415,7 +416,7 @@ export default function App() {
                   : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
               }`}
             >
-              Todos los 28 Capítulos
+              Todos los 14 Días (28 Capítulos)
             </button>
             {challengeData.map((sec, idx) => (
               <button

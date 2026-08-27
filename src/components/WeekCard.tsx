@@ -86,7 +86,7 @@ export const WeekCard: React.FC<WeekCardProps> = ({
       >
         <div className="space-y-1.5">
           <div className="flex items-center justify-between pb-2 mb-1 border-b border-black/5 text-xs font-bold uppercase tracking-wider text-slate-500 px-2">
-            <span>Capítulos de Mateo</span>
+            <span>Lectura Diaria (2 Capítulos)</span>
             <div className="flex gap-4">
               <span className="text-rose-600 w-8 text-center truncate" title={partnerNames.flor}>
                 {partnerNames.flor.charAt(0) || 'F'}

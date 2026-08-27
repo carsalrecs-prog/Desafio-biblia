@@ -11,9 +11,10 @@ interface BiblePassageModalProps {
 export const BiblePassageModal: React.FC<BiblePassageModalProps> = ({ day, onClose }) => {
   if (!day) return null;
 
-  const encodedQuery = encodeURIComponent(day.reading);
-  const bibleGatewayUrl = `https://www.biblegateway.com/passage/?search=${encodedQuery}&version=RVR1960`;
-  const youVersionUrl = `https://www.bible.com/search/bible?q=${encodedQuery}`;
+  // Reading query (e.g., "Mateo 1-2")
+  const cleanRange = day.reading.replace(/\s+/g, '');
+  const bibleGatewayUrl = `https://www.biblegateway.com/passage/?search=${encodeURIComponent(cleanRange)}&version=RVR1960`;
+  const youVersionUrl = `https://www.bible.com/search/bible?q=${encodeURIComponent(day.reading)}`;
 
   return (
     <AnimatePresence>
@@ -39,7 +40,7 @@ export const BiblePassageModal: React.FC<BiblePassageModalProps> = ({ day, onClo
               </div>
               <div>
                 <span className="text-xs font-bold text-rose-600 uppercase tracking-wider">
-                  Día {day.num} de 28 · Evangelio de Mateo
+                  Día {day.num} de 14 · 2 Capítulos al Día
                 </span>
                 <h3 className="text-xl font-bold text-slate-800" style={{ fontFamily: 'Georgia, serif' }}>
                   {day.reading}
@@ -48,7 +49,7 @@ export const BiblePassageModal: React.FC<BiblePassageModalProps> = ({ day, onClo
             </div>
             <button
               onClick={onClose}
-              className="p-1.5 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition-colors"
+              className="p-1.5 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition-colors cursor-pointer"
               aria-label="Cerrar"
             >
               <X className="w-5 h-5" />
@@ -59,13 +60,13 @@ export const BiblePassageModal: React.FC<BiblePassageModalProps> = ({ day, onClo
             {day.topic && (
               <div className="p-3.5 rounded-2xl bg-rose-50/70 border border-rose-200 text-rose-950">
                 <p className="text-xs font-bold text-rose-700 uppercase tracking-wider mb-1">
-                  Tema Central:
+                  Temas Centrales de Hoy:
                 </p>
                 <p className="font-semibold text-sm text-slate-800">
                   {day.topic}
                 </p>
                 {day.summary && (
-                  <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                  <p className="text-xs text-slate-600 mt-2 leading-relaxed">
                     {day.summary}
                   </p>
                 )}
@@ -74,17 +75,16 @@ export const BiblePassageModal: React.FC<BiblePassageModalProps> = ({ day, onClo
 
             <div className="p-4 rounded-2xl bg-[#FFFBF7] border border-amber-100 text-xs sm:text-sm text-slate-700 leading-relaxed">
               <p className="font-bold text-slate-800 mb-1 flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-amber-500" /> Guía para tu lectura en pareja:
+                <Sparkles className="w-4 h-4 text-amber-500" /> Guía para su lectura en pareja (2 capítulos):
               </p>
               <p>
-                Antes de comenzar a leer <strong>{day.reading}</strong>, tomen un momento de oración juntos: 
-                pidan a Jesús que abra sus corazones a la verdad de Su Evangelio y anoten en su reflexión lo que más les hable.
+                Tomen unos minutos juntos antes de leer <strong>{day.reading}</strong>. Pueden leer un capítulo cada uno en voz alta o alternar párrafos, y al terminar anoten lo que Dios habló a sus corazones.
               </p>
             </div>
 
             <div className="space-y-2">
               <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                Leer capítulo completo en línea:
+                Leer pasaje completo de hoy en línea:
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 <a
@@ -94,7 +94,7 @@ export const BiblePassageModal: React.FC<BiblePassageModalProps> = ({ day, onClo
                   className="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-rose-300 hover:bg-rose-50/50 transition-all group"
                 >
                   <span className="text-sm font-semibold text-slate-700 group-hover:text-rose-700">
-                    BibleGateway (RVR1960)
+                    BibleGateway ({day.reading})
                   </span>
                   <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-rose-500" />
                 </a>
